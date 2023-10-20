@@ -15,10 +15,10 @@ const testController = (article: any) => {
 }
 
 console.log('[')
-fs.readdir('./html', (err, list)=>{
+fs.readdir('./lenin', (err, list)=>{
     list.forEach(file =>{
         if(file.endsWith('.htm') || file.endsWith('.html'))
-            fs.readFile(`./html/${file}`, (err, html)=>{
+            fs.readFile(`./lenin/${file}`, (err, html)=>{
                 testController(ArticleParser.parse(file.replace('.html', '').replace('.htm', ''), html.toString()));
             });
     })   
