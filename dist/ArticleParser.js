@@ -20,6 +20,7 @@ class ArticleParser {
                 translated: undefined,
                 transcription: undefined,
                 copyright: undefined,
+                other: undefined
             };
             uglyInformation.forEach(x => {
                 var info = x.info.toLowerCase();
@@ -42,7 +43,7 @@ class ArticleParser {
                     information.copyright = x.content;
                 }
                 else {
-                    console.log(x.info);
+                    information.other = { name: x.info, value: x.content };
                 }
             });
             return information;
@@ -83,8 +84,6 @@ class ArticleParser {
         return uniqueObjects;
     }
     static notes(html) {
-        /*const notes = dom.window.document.querySelectorAll('.fst');
-        return [...notes].map(x => x.outerHTML);*/
         let note_elements = [];
         new JSDOM(html.split(REGEX).filter(x => /<h\d>Notes<\/h\d>/.test(x))).window.document.querySelectorAll('p.endnote, .fst')
             .forEach((x) => note_elements.push(x));

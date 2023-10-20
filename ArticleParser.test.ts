@@ -14,18 +14,19 @@ const testController = (article: any) => {
     console.log(JSON.stringify(article), ',')
 }
 
-/*fs.readdir('./html', (err, list)=>{
+console.log('[')
+fs.readdir('./html', (err, list)=>{
     list.forEach(file =>{
         if(file.endsWith('.htm') || file.endsWith('.html'))
             fs.readFile(`./html/${file}`, (err, html)=>{
-                testController(ArticleParser.parse(file, html.toString()));
+                testController(ArticleParser.parse(file.replace('.html', '').replace('.htm', ''), html.toString()));
             });
     })   
-});*/
-let list = ['00gyz75', 'x06', 'viii8iii'];
+});
+/*let list = ['00gyz75', 'x06', 'viii8iii', '17a', '16mvk', 'ch00', 'ch02s7'];
 console.log('[')
 list.forEach(ele => {
     fs.readFile(`./html/${ele}.htm`, (err, html)=>{
         testController(ArticleParser.parse(`${ele}.htm`, html.toString()));
     });
-});
+});*/
