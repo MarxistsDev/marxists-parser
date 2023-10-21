@@ -1,1 +1,0 @@
-It seems that the file without `div.information` just don't have any data.
