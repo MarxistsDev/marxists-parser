@@ -1,32 +1,55 @@
-import ArticleParser from "./ArticleParser";
-import fs from 'fs';
+import { error } from "console";
+import ArticleParser, { Article } from "./ArticleParser";
+import fs from 'fs/promises';
+import path from 'path';
 
+async function getUniqueFileName(originalPath:string) {
+  let filename = path.basename(originalPath);
+  const dir = path.dirname(originalPath);
+  let fileNumber = 2; // Start with 2 to get the desired format like full2.json
 
-const displayArr = (arr:string[]) => arr.forEach((element,index) => {
-    console.log(index, element);
- });
+  while (true) {
+    const baseName = path.basename(filename, path.extname(filename));
+    const extension = path.extname(filename);
+    const newFileName = `${baseName}${fileNumber}${extension}`;
+    const newPath = path.join(dir, newFileName);
 
-/*const testFormat = (article:object) => {
-    return article.;
-}*/
-
-const testController = (article: any) => {
-    console.log(JSON.stringify(article), ',')
+    try {
+      await fs.access(newPath);
+      // If this line is reached, the file exists; increment the number and try again.
+      fileNumber++;
+    } catch (err:any) {
+      if (err.code === 'ENOENT') {
+        // File does not exist; return the unique filename.
+        return newPath;
+      } else {
+        throw err; // Handle other errors.
+      }
+    }
+  }
 }
 
-console.log('[')
-fs.readdir('./lenin', (err, list)=>{
-    list.forEach(file =>{
-        if(file.endsWith('.htm') || file.endsWith('.html'))
-            fs.readFile(`./lenin/${file}`, (err, html)=>{
-                testController(ArticleParser.parse(file.replace('.html', '').replace('.htm', ''), html.toString()));
-            });
-    })   
-});
-/*let list = ['00gyz75', 'x06', 'viii8iii', '17a', '16mvk', 'ch00', 'ch02s7'];
-console.log('[')
-list.forEach(ele => {
-    fs.readFile(`./html/${ele}.htm`, (err, html)=>{
-        testController(ArticleParser.parse(`${ele}.htm`, html.toString()));
-    });
-});*/
+// Usage example:
+const FOLDER = './www/';
+const OUT = 'full.json';
+
+const processFiles = async() => {
+    let articles:Article[] = []; 
+    try {
+      const files = await fs.readdir(FOLDER);
+  
+      for (const file of files) {
+        if (file.endsWith('.htm') || file.endsWith('.html')) {
+          const html = await fs.readFile(`${FOLDER}${file}`, 'utf8');
+          articles.push(ArticleParser.parse(file.replace('.html', '').replace('.htm', ''), html));
+        }
+      }
+      const outFile = await getUniqueFileName(OUT);
+      await fs.writeFile(outFile, JSON.stringify(articles, null, 4));
+      console.log('JSON data is saved.');
+    } catch (err) {
+      console.error(err);
+    }
+}
+  
+processFiles();

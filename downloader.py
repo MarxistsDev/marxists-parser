@@ -3,7 +3,7 @@ import requests
 import os
 
 URL = "https://www.marxists.org/"
-FOLDER = './lenins/'
+FOLDER = './www/'
 
 with open('./lenin.json') as lenin:
     for i in json.load(lenin):

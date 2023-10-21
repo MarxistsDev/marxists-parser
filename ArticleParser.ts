@@ -72,15 +72,44 @@ export default class ArticleParser{
         else return undefined;
     }
     private static largest(arr:string[]){ return arr.reduce((r, c) => r.length >= c.length ? r : c);}
-    public static content(html:string):string | undefined{
-        const lg = this.largest(html.split(REGEX));
-        // largest work 90% of the time, so I should for 'sus' tags within it, so that if I find a `<footer>` or `<head>` I can flag in in a log file or print it
-        
-        if (!/((<\s*(footer|head))|(class|id)\s*=\s*\"(footer|head))/.test(lg)){ //Need to detect `Notes` too
-           //no footer and head
+    public static content(html:string):string | undefined{ //1810/4187 missing `<!-- t2h-body -->` or number of `<p>`
+        //const lst = html.split(REGEX);
+        const lst = new JSDOM(html).window.document.body.outerHTML.split(REGEX);
+        const lg = this.largest(lst);
+        const notContentRegex = /(<\s*(footer|head)\s)|(class|id)\s*=\s*\"(footer|head)|(<h\d>\s*Notes\s*<\/h\d>)/;///(((<\s*(footer|head))|(class|id)\s*=\s*\"(footer|head))|(<h\d>Notes<\/h\d>))/;
+        // largest work around 60% of the time, so I should for 'sus' tags within it, so that if I find a `<footer>` or `<head>` I can flag in in a log file or print it
+        if (!notContentRegex.test(lg)){
+           //no footer and head or Notes
            return lg;
-        }else{
-            //has footer or head
+        }else{ // if has `<!-- t2h-body -->`
+            const body = lst.filter((x:string) => /<!--\s*t\dh-body\s*-->/.test(x))
+            if(body && body.length == 1)
+                return body[0]; //1810 to 62
+            else if (body.length > 1)
+                console.log(html); // never happend in lenin test
+            /*
+                else{ // content if the section with the highest number of `<p>`
+                let indexes:{ptags: number; content: string}[] = [];
+                lst.forEach((ele:string) => {
+                    const dom = new JSDOM(ele);
+                    let pList = dom.window.document.querySelectorAll('p');
+                    indexes.push({ptags:pList.length, content:ele});
+                });
+                if(indexes){
+                    let mostpTags = indexes[0];
+                    indexes.forEach(ele =>{
+                        if(ele.ptags > mostpTags.ptags)
+                            mostpTags = ele
+                    });
+                    if(!notContentRegex.test(mostpTags.content))
+                        return mostpTags.content;
+                    else
+                        return undefined;
+                }
+            }*/
+            //has footer or head or Notes
+            /*lst.forEach((x:string) => console.log('>>>>', x));
+            console.log('------------------------------')*/
             return undefined;
         }
     }

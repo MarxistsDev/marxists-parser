@@ -9,7 +9,8 @@
   "scripts": {
     "start": "node ./dist/index.js",
     "dev": "npx tsc && node ./dist/index.js",
-    "test": "npx tsc && node ./dist/ArticleParser.test.js"
+    "test": "npx tsc && node ./dist/ArticleParser.test.js",
+    "analyze": "npx tsc && node ./dist/ArticleParser.analyze.js"
   },
   "author": "",
   "license": "ISC",
