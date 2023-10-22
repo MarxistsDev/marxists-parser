@@ -68,29 +68,6 @@ class ArticleParser {
                 return body[0]; //1810 to 62
             else if (body.length > 1)
                 console.log(html); // never happend in lenin test
-            /*
-                else{ // content if the section with the highest number of `<p>`
-                let indexes:{ptags: number; content: string}[] = [];
-                lst.forEach((ele:string) => {
-                    const dom = new JSDOM(ele);
-                    let pList = dom.window.document.querySelectorAll('p');
-                    indexes.push({ptags:pList.length, content:ele});
-                });
-                if(indexes){
-                    let mostpTags = indexes[0];
-                    indexes.forEach(ele =>{
-                        if(ele.ptags > mostpTags.ptags)
-                            mostpTags = ele
-                    });
-                    if(!notContentRegex.test(mostpTags.content))
-                        return mostpTags.content;
-                    else
-                        return undefined;
-                }
-            }*/
-            //has footer or head or Notes
-            /*lst.forEach((x:string) => console.log('>>>>', x));
-            console.log('------------------------------')*/
             return undefined;
         }
     }

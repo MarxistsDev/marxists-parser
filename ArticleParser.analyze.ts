@@ -39,14 +39,14 @@ async function getFileWithHighestIncrement(baseName: string, extension: string, 
 // Usage example:
 const baseName = 'full';
 const extension = '.json';
+const DATA = './data/';
 
 const analyze = async () => {
   try {
-    const newestFile = await getFileWithHighestIncrement(baseName, extension);
+    const newestFile = await getFileWithHighestIncrement(baseName, extension, DATA);
     console.log(newestFile);
     if (newestFile) {
-      console.log(__dirname);
-      const { default: jsonFile } = await import(path.join('..', newestFile));
+      const { default: jsonFile } = await import(path.join('..', DATA, newestFile));
       const listOfMissingContent = jsonFile.filter((x:Article) => x.content === undefined);
       console.table(listOfMissingContent);
       console.log(listOfMissingContent.length);

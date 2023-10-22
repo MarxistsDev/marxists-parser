@@ -37,38 +37,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const promises_1 = __importDefault(require("fs/promises"));
 const path_1 = __importDefault(require("path"));
-/*async function getFileWithHighestIncrement(baseName: string, extension: string, directory: string = './'): Promise<string | null> {
-  try {
-    let highestIncrement = -1;
-    let highestIncrementedFile = null;
-
-    const files = await fs.readdir(directory);
-
-    for (const file of files) {
-      if (file.startsWith(baseName) && file.endsWith(extension)) {
-        const regex = new RegExp(`${baseName}(\\d+)?${extension}`);
-        const match = file.match(regex);
-
-        if (match && match[1]) {
-          const increment = parseInt(match[1], 10);
-          if (increment > highestIncrement) {
-            highestIncrement = increment;
-            highestIncrementedFile = file;
-          }
-        }
-      }
-    }
-
-    return highestIncrementedFile;
-  } catch (error) {
-    console.error('Error while getting the highest increment file:', error);
-    return null;
-  }
-}
-
-// Usage example:
-const baseName = 'full';
-const extension = '.json';*/
 function getFileWithHighestIncrement(baseName, extension, directory = './') {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -102,13 +70,13 @@ function getFileWithHighestIncrement(baseName, extension, directory = './') {
 // Usage example:
 const baseName = 'full';
 const extension = '.json';
+const DATA = './data/';
 const analyze = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const newestFile = yield getFileWithHighestIncrement(baseName, extension);
+        const newestFile = yield getFileWithHighestIncrement(baseName, extension, DATA);
         console.log(newestFile);
         if (newestFile) {
-            console.log(__dirname);
-            const { default: jsonFile } = yield Promise.resolve(`${path_1.default.join('..', newestFile)}`).then(s => __importStar(require(s)));
+            const { default: jsonFile } = yield Promise.resolve(`${path_1.default.join('..', DATA, newestFile)}`).then(s => __importStar(require(s)));
             const listOfMissingContent = jsonFile.filter((x) => x.content === undefined);
             console.table(listOfMissingContent);
             console.log(listOfMissingContent.length);
