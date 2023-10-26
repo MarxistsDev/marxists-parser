@@ -25,5 +25,5 @@ export async function works(href:string, text: string) {
         } catch (err) { }
     });
 
-    return filteredLinks.map((x: any) => ({ href: href.replace(/\/[\w\-]+.htm(l)?$/, '/') + x.href, title: x.text }));
+    return filteredLinks.map((x: any) => ({ href: href.replace('.', '\/').replace('\/htm', '.htm').replace(/\/[\w\-]+.htm(l)?$/, '/') + x.href, title: x.text }));
 }

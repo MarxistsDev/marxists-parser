@@ -16,6 +16,7 @@ exports.getUniqueFileName = void 0;
 const ArticleParser_1 = __importDefault(require("./ArticleParser"));
 const promises_1 = __importDefault(require("fs/promises"));
 const path_1 = __importDefault(require("path"));
+const worker_threads_1 = require("worker_threads");
 function getUniqueFileName(filename, dir = './data', ext = '.json') {
     return __awaiter(this, void 0, void 0, function* () {
         let fileNumber = 1; // Start with 2 to get the desired format like full2.json
@@ -44,25 +45,64 @@ function getUniqueFileName(filename, dir = './data', ext = '.json') {
 }
 exports.getUniqueFileName = getUniqueFileName;
 // Usage example:
-const DATA = './data/';
 const FOLDER = './www/';
 const OUT = 'full';
-const processFiles = () => __awaiter(void 0, void 0, void 0, function* () {
-    let articles = [];
-    try {
-        const files = yield promises_1.default.readdir(FOLDER);
+const DATA = './data/';
+function processFilesInWorker() {
+    return __awaiter(this, void 0, void 0, function* () {
+        const { files } = worker_threads_1.workerData;
+        const articles = [];
         for (const file of files) {
             if (file.endsWith('.htm') || file.endsWith('.html')) {
-                const html = yield promises_1.default.readFile(FOLDER + file, 'utf8');
+                const filePath = path_1.default.join(FOLDER, file);
+                const html = yield promises_1.default.readFile(filePath, 'utf8');
                 articles.push(ArticleParser_1.default.parse(file.replace('.html', '').replace('.htm', ''), html));
             }
         }
-        const outFile = yield getUniqueFileName(OUT);
-        yield promises_1.default.writeFile(DATA + outFile, JSON.stringify(articles, null, 4));
-        console.log('JSON data is saved.');
-    }
-    catch (err) {
-        console.error(err);
-    }
-});
-processFiles();
+        return articles;
+    });
+}
+function getFilesToProcess() {
+    return __awaiter(this, void 0, void 0, function* () {
+        const files = yield promises_1.default.readdir(FOLDER);
+        return files;
+    });
+}
+function main() {
+    return __awaiter(this, void 0, void 0, function* () {
+        if (worker_threads_1.isMainThread) {
+            const files = yield getFilesToProcess();
+            const numThreads = require('os').cpus().length; // Number of CPU cores
+            const chunkSize = Math.ceil(files.length / numThreads);
+            const workerPromises = [];
+            for (let i = 0; i < numThreads; i++) {
+                const start = i * chunkSize;
+                const end = start + chunkSize;
+                const workerFiles = files.slice(start, end);
+                const workerPromise = new Promise((resolve, reject) => {
+                    const worker = new worker_threads_1.Worker(__filename, {
+                        workerData: { files: workerFiles },
+                    });
+                    worker.on('message', resolve);
+                    worker.on('error', reject);
+                    worker.on('exit', (code) => {
+                        if (code !== 0) {
+                            reject(new Error(`Worker stopped with exit code ${code}`));
+                        }
+                    });
+                });
+                workerPromises.push(workerPromise);
+            }
+            const results = yield Promise.all(workerPromises);
+            const articles = results.reduce((acc, result) => acc.concat(result), []);
+            const outFile = yield getUniqueFileName(OUT);
+            yield promises_1.default.writeFile(outFile, JSON.stringify(articles, null, 4));
+            console.log('JSON data is saved.');
+        }
+        else {
+            const articles = yield processFilesInWorker();
+            worker_threads_1.parentPort === null || worker_threads_1.parentPort === void 0 ? void 0 : worker_threads_1.parentPort.postMessage(articles);
+        }
+    });
+}
+main();

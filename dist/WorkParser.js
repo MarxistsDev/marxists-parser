@@ -25,7 +25,7 @@ function works(href, text) {
             }
             catch (err) { }
         });
-        return filteredLinks.map((x) => ({ href: href.replace(/\/[\w\-]+.htm(l)?$/, '/') + x.href, title: x.text }));
+        return filteredLinks.map((x) => ({ href: href.replace('.', '\/').replace('\/htm', '.htm').replace(/\/[\w\-]+.htm(l)?$/, '/') + x.href, title: x.text }));
     });
 }
 exports.works = works;

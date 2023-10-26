@@ -1,5 +1,3 @@
-import { AnyARecord } from "dns";
-
 const jsdom = require('jsdom');
 const { JSDOM } = jsdom;
 const REGEX = /<hr(?!.*\bclass=["']section["']).*\/?>/gim;//<hr\s*(class=\"((?!section).)*\")?\s*\/?>
@@ -72,9 +70,10 @@ export default class ArticleParser{
         else return undefined;
     }
     private static largest(arr:string[]){ return arr.reduce((r, c) => r.length >= c.length ? r : c);}
-    public static content(html:string):string | undefined{ //1810/4187 missing `<!-- t2h-body -->` or number of `<p>`
+    public static content(dom:any):string | undefined{ //1810/4187 missing `<!-- t2h-body -->` or number of `<p>`
         //const lst = html.split(REGEX);
-        const lst = new JSDOM(html).window.document.body.outerHTML.split(REGEX);
+        //const lst = new JSDOM(html).window.document.body.outerHTML.split(REGEX);
+        const lst = dom.window.document.body.outerHTML.split(REGEX);
         const lg = this.largest(lst);
         const notContentRegex = /(<\s*(footer|head)\s)|(class|id)\s*=\s*\"(footer|head)|(<h\d>\s*Notes\s*<\/h\d>)/;///(((<\s*(footer|head))|(class|id)\s*=\s*\"(footer|head))|(<h\d>Notes<\/h\d>))/;
         // largest work around 60% of the time, so I should for 'sus' tags within it, so that if I find a `<footer>` or `<head>` I can flag in in a log file or print it
@@ -86,7 +85,7 @@ export default class ArticleParser{
             if(body && body.length == 1)
                 return body[0]; //1810 to 62
             else if (body.length > 1)
-                console.log(html); // never happend in lenin test
+                console.log(dom.window.document.outerHTML); // never happend in lenin test
             return undefined;
         }
     }
@@ -115,7 +114,7 @@ export default class ArticleParser{
 
     public static notes(html:string){
         let note_elements: any[] = [];
-        new JSDOM(html.split(REGEX).filter(x => /<h\d>Notes<\/h\d>/.test(x))).window.document.querySelectorAll('p.endnote, .fst')
+        new JSDOM(html.split(REGEX).filter(x => /<h\d>Notes<\/h\d>/.test(x))).window.document.querySelectorAll('p.endnote, .fst') //JSDOM to change
         .forEach((x:any) => note_elements.push(x));
         let notes = note_elements.map(x => {
             let potential_id = /(name|id)\s*=['"](.*?)['"]/.exec(x.outerHTML);
@@ -129,7 +128,7 @@ export default class ArticleParser{
         return {
             title: file,
             information: this.information(dom),
-            content: this.content(html),
+            content: this.content(dom),
             notes: this.notes(html)
         };
     }
