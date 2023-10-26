@@ -12,38 +12,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getUniqueFileName = void 0;
 const ArticleParser_1 = __importDefault(require("./ArticleParser"));
+const common_1 = require("./common");
 const promises_1 = __importDefault(require("fs/promises"));
 const path_1 = __importDefault(require("path"));
 const worker_threads_1 = require("worker_threads");
-function getUniqueFileName(filename, dir = './data', ext = '.json') {
-    return __awaiter(this, void 0, void 0, function* () {
-        let fileNumber = 1; // Start with 2 to get the desired format like full2.json
-        while (true) {
-            let newFileName = `${filename}${fileNumber}${ext}`;
-            if (fileNumber == 1)
-                newFileName = `${filename}${ext}`;
-            const newPath = path_1.default.join(dir, newFileName);
-            try {
-                yield promises_1.default.access(newPath);
-                // If this line is reached, the file exists; increment the number and try again.
-                fileNumber++;
-            }
-            catch (err) {
-                console.log(err);
-                if (err.code === 'ENOENT') {
-                    // File does not exist; return the unique filename.
-                    return newPath;
-                }
-                else {
-                    throw err; // Handle other errors.
-                }
-            }
-        }
-    });
-}
-exports.getUniqueFileName = getUniqueFileName;
 // Usage example:
 const FOLDER = './www/';
 const OUT = 'full';
@@ -95,7 +68,7 @@ function main() {
             }
             const results = yield Promise.all(workerPromises);
             const articles = results.reduce((acc, result) => acc.concat(result), []);
-            const outFile = yield getUniqueFileName(OUT);
+            const outFile = yield (0, common_1.getUniqueFileName)(OUT);
             yield promises_1.default.writeFile(outFile, JSON.stringify(articles, null, 4));
             console.log('JSON data is saved.');
         }
