@@ -35,45 +35,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const promises_1 = __importDefault(require("fs/promises"));
 const path_1 = __importDefault(require("path"));
-function getFileWithHighestIncrement(baseName, extension, directory = './') {
-    return __awaiter(this, void 0, void 0, function* () {
-        try {
-            let highestIncrement = -1;
-            let highestIncrementedFile = null;
-            const files = yield promises_1.default.readdir(directory);
-            const regex = new RegExp(`${baseName}(\\d+)?${extension}`);
-            for (const file of files) {
-                if (file === `${baseName}${extension}`) {
-                    highestIncrementedFile = file;
-                }
-                if (regex.test(file)) {
-                    const match = file.match(regex);
-                    if (match && match[1]) {
-                        const increment = parseInt(match[1], 10);
-                        if (increment > highestIncrement) {
-                            highestIncrement = increment;
-                            highestIncrementedFile = file;
-                        }
-                    }
-                }
-            }
-            return highestIncrementedFile;
-        }
-        catch (error) {
-            console.error('Error while getting the highest increment file:', error);
-            return null;
-        }
-    });
-}
+const common_1 = require("./common");
 // Usage example:
 const baseName = 'full';
 const extension = '.json';
 const DATA = './data/';
 const analyze = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const newestFile = yield getFileWithHighestIncrement(baseName, extension, DATA);
+        const newestFile = yield (0, common_1.getFileWithHighestIncrement)(baseName, extension, DATA);
         console.log(newestFile);
         if (newestFile) {
             const { default: jsonFile } = yield Promise.resolve(`${path_1.default.join('..', DATA, newestFile)}`).then(s => __importStar(require(s)));

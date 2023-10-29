@@ -1,5 +1,5 @@
-const jsdom = require('jsdom');
-const { JSDOM } = jsdom;
+import { JSDOM } from 'jsdom';
+
 const REGEX = /<hr(?!.*\bclass=["']section["']).*\/?>/gim;//<hr\s*(class=\"((?!section).)*\")?\s*\/?>
 
 export interface Information{
@@ -26,7 +26,7 @@ export interface Note{
 
 export default class ArticleParser{
 
-    public static information(dom:any):Information | undefined{
+    public static information(dom:JSDOM):Information | undefined{
         const info = dom.window.document.querySelector('.information');
         if(info){
             const uglyInformation = [...info.outerHTML.matchAll(/<span\sclass="info".*?>([\w\W]*?)<\/span>([\w\W]*?)(<br\/?>|<\/p>)/gim)]
@@ -69,12 +69,12 @@ export default class ArticleParser{
         }
         else return undefined;
     }
-    private static largest(arr:string[]){ return arr.reduce((r, c) => r.length >= c.length ? r : c);}
-    public static content(dom:any):string | undefined{ //1810/4187 missing `<!-- t2h-body -->` or number of `<p>`
+    private static largest(arr:string[]):string{ return arr.reduce((r, c) => r.length >= c.length ? r : c);}
+    public static content(dom: JSDOM):string | undefined{ //1810/4187 missing `<!-- t2h-body -->` or number of `<p>`
         //const lst = html.split(REGEX);
         //const lst = new JSDOM(html).window.document.body.outerHTML.split(REGEX);
-        const lst = dom.window.document.body.outerHTML.split(REGEX);
-        const lg = this.largest(lst);
+        const lst = dom.window.document.body.outerHTML.split(REGEX); // 62 to 23
+        const lg:string = this.largest(lst);
         const notContentRegex = /(<\s*(footer|head)\s)|(class|id)\s*=\s*\"(footer|head)|(<h\d>\s*Notes\s*<\/h\d>)/;///(((<\s*(footer|head))|(class|id)\s*=\s*\"(footer|head))|(<h\d>Notes<\/h\d>))/;
         // largest work around 60% of the time, so I should for 'sus' tags within it, so that if I find a `<footer>` or `<head>` I can flag in in a log file or print it
         if (!notContentRegex.test(lg)){
@@ -85,7 +85,7 @@ export default class ArticleParser{
             if(body && body.length == 1)
                 return body[0]; //1810 to 62
             else if (body.length > 1)
-                console.log(dom.window.document.outerHTML); // never happend in lenin test
+                console.log(dom.window.document.body.outerHTML); // never happend in lenin test
             return undefined;
         }
     }
@@ -114,7 +114,7 @@ export default class ArticleParser{
 
     public static notes(html:string){
         let note_elements: any[] = [];
-        new JSDOM(html.split(REGEX).filter(x => /<h\d>Notes<\/h\d>/.test(x))).window.document.querySelectorAll('p.endnote, .fst') //JSDOM to change
+        new JSDOM(html.split(REGEX).filter(x => /<h\d>Notes<\/h\d>/.test(x))[0]).window.document.querySelectorAll('p.endnote, .fst') //JSDOM to change
         .forEach((x:any) => note_elements.push(x));
         let notes = note_elements.map(x => {
             let potential_id = /(name|id)\s*=['"](.*?)['"]/.exec(x.outerHTML);
