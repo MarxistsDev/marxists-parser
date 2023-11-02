@@ -9,6 +9,7 @@
 export interface Glossary{
     shortname:string[] | undefined;
     term:string  | undefined;
+    image:string | undefined;
     content:string  | undefined;
 }
 
@@ -25,17 +26,25 @@ export function glossary(html:string): Glossary[]{
                 //console.log(`${str.trim()}: has other shortname`);
                 object_list[object_list.length - 1].shortname?.push(str.trim());
             } else {
-                object_list.push({ shortname: [str.trim()], term: undefined, content: undefined });
+                object_list.push({ shortname: [str.trim()], term: undefined, image: undefined, content: undefined });
             }
         } else {
             if (object_list.length > 0) {
-                let bio = str.split(/<\s*?(p|span)\s*?class=\"term\".*?>([\w\W]*?)<\s*?\/\s*?(p|span)\s*?>/).filter(x => x != 'span' && x != 'p');
+                let bio_split = str.split(/<\s*?(p|span)\s*?class=\"term\".*?>([\w\W]*?)<\s*?\/\s*?(p|span)\s*?>/).filter(x => x != 'span' && x != 'p');
                 //console.log('Bio Length', bio.length, bio);
-                if(bio.length === 3){
-                    object_list[object_list.length - 1].term = bio[1];
-                    object_list[object_list.length - 1].content = bio[2];
+                if(bio_split.length === 3){
+                    object_list[object_list.length - 1].term = bio_split[1];
+                    //object_list[object_list.length - 1].content = bio_split[2];
+                    let pic_split = bio_split[2].split(/<\s*?img\s*?src\s*?=\s*?\"(.*?)\".*?>/);
+                    if(pic_split.length === 3){
+                        object_list[object_list.length - 1].image = pic_split[1];
+                        object_list[object_list.length - 1].content = pic_split[2];
+                    }else if(pic_split.length === 1){
+                        object_list[object_list.length - 1].content = pic_split[0];
+                    }else
+                        console.log('Pic', pic_split);
                 }else
-                    console.log('Bio', bio);
+                    console.log('Bio', bio_split);
                 
             } else {
                 console.log('No previous shortname to associate content with.');

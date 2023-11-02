@@ -1,5 +1,4 @@
 import { JSDOM } from 'jsdom';
-import ArticleParser from './ArticleParser';
 
 export interface Data {
     "id": number;
@@ -11,10 +10,6 @@ export interface Data {
 }
 
 export async function works(href: string, text: string) {
-    /*console.log(href);
-    const response = await fetch(href);
-    const text = await response.text();*/
-
     const dom = new JSDOM(text);
 
     const filteredLinks:any = Array.from(dom.window.document.querySelectorAll('.indentb a, .index a, .fst a, .tda a, .toc a, .disc a')).filter(x => x.getAttribute('href'));//.map(x => x.getAttribute('href'));
@@ -40,18 +35,7 @@ export async function works(href: string, text: string) {
         } catch (err) { }
     }));
 
-    /*const unique:HTMLAnchorElement[] = Array.from(new Set(filteredLinks.map));
 
-    if(unique.length == 0)
-        console.log(href);
-    return unique.map((x: HTMLAnchorElement | Element) =>
-    ({
-        href: href.replace(/\./g, '/')
-            .replace('/htm', '.htm')
-            .replace(/\/[\w\-]+.htm(l)?$/, '/') 
-                + x.getAttribute('href')!.replace('works/', '').replace(/\.\.\//g, ''),
-        title: x.textContent
-    }));*/
     if(filteredLinks.length == 0)
         console.log(href);
     const linkobj = filteredLinks.map((x: HTMLAnchorElement) =>

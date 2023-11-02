@@ -57,4 +57,4 @@ export async function getFileWithHighestIncrement(baseName: string, extension: s
       console.error('Error while getting the highest increment file:', error);
       return null;
     }
-  }
+}

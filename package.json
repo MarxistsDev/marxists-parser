@@ -12,13 +12,15 @@
     "test": "npx tsc && node ./dist/ArticleParser.test.js",
     "analyze": "npx tsc && node ./dist/ArticleParser.analyze.js",
     "test2": "npx tsc && node ./dist/WorkParser.test.js",
-    "test3": "npx tsc && node ./dist/GlossaryParser.test.js"
+    "test3": "npx tsc && node ./dist/GlossaryParser.test.js",
+    "download": "npx tsc && node ./dist/downloader.js"
   },
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
     "@types/jsdom": "^21.1.4",
+    "axios": "^1.6.0",
     "jsdom": "^22.1.0"
   }
 }
