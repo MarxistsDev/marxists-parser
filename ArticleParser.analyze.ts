@@ -4,7 +4,7 @@ import { Article, Note } from "./ArticleParser";
 import { getFileWithHighestIncrement } from './common';
 
 // Usage example:
-const baseName = 'full';
+const baseName = 'article';
 const extension = '.json';
 const DATA = './data/';
 

@@ -1,0 +1,37 @@
+
+> lenin@1.0.0 analyze
+> npx tsc && node ./dist/ArticleParser.analyze.js
+
+article.json
+┌─────────┬────────────────────────────────────────────┬─────────────┬─────────────────────────────────────────────────────┐
+│ (index) │                   title                    │ information │                        notes                        │
+├─────────┼────────────────────────────────────────────┼─────────────┼─────────────────────────────────────────────────────┤
+│    0    │    'archive.lenin.works.1893.oct.00mu'     │  [Object]   │ [ [Object], [Object], [Object], ... 4 more items ]  │
+│    1    │    'archive.lenin.works.1893.oct.05mau'    │  [Object]   │ [ [Object], [Object], [Object], ... 2 more items ]  │
+│    2    │ 'archive.lenin.works.1895.misc.engels-bio' │  [Object]   │          [ [Object], [Object], [Object] ]           │
+│    3    │    'archive.lenin.works.1899.dec.trend'    │  [Object]   │ [ [Object], [Object], [Object], ... 6 more items ]  │
+│    4    │     'archive.lenin.works.1901.may.04'      │  [Object]   │ [ [Object], [Object], [Object], ... 7 more items ]  │
+│    5    │    'archive.lenin.works.1908.mec.index'    │             │                         []                          │
+│    6    │    'archive.lenin.works.1908.mec.intro'    │             │ [ [Object], [Object], [Object], ... 10 more items ] │
+│    7    │    'archive.lenin.works.1908.mec.one1'     │             │                         []                          │
+│    8    │    'archive.lenin.works.1908.mec.one2'     │             │                         []                          │
+│    9    │    'archive.lenin.works.1908.mec.one3'     │             │                         []                          │
+│   10    │    'archive.lenin.works.1908.mec.one4'     │             │                         []                          │
+│   11    │    'archive.lenin.works.1908.mec.one5'     │             │                         []                          │
+│   12    │    'archive.lenin.works.1908.mec.one6'     │             │                         []                          │
+│   13    │   'archive.lenin.works.1908.mec.pref01'    │             │                         []                          │
+│   14    │   'archive.lenin.works.1908.mec.pref02'    │             │                         []                          │
+│   15    │    'archive.lenin.works.1908.mec.two1'     │             │                         []                          │
+│   16    │    'archive.lenin.works.1908.mec.two2'     │             │                         []                          │
+│   17    │     'archive.lenin.works.1911.oct.18b'     │  [Object]   │ [ [Object], [Object], [Object], ... 10 more items ] │
+│   18    │     'archive.lenin.works.1914.mar.15'      │  [Object]   │ [ [Object], [Object], [Object], ... 2 more items ]  │
+│   19    │ 'archive.lenin.works.1916.ni-eps.contents' │             │                         []                          │
+│   20    │ 'archive.lenin.works.1916.ni-eta.contents' │             │                         []                          │
+│   21    │     'archive.lenin.works.1917.apr.x01'     │  [Object]   │ [ [Object], [Object], [Object], ... 13 more items ] │
+│   22    │ 'archive.lenin.works.1917.staterev.index'  │  [Object]   │                         []                          │
+│   23    │     'archive.lenin.works.1919.nov.29'      │  [Object]   │                    [ [Object] ]                     │
+│   24    │     'archive.lenin.works.1920.feb.16'      │  [Object]   │                         []                          │
+│   25    │    'archive.lenin.works.1920.lwc.index'    │     {}      │                         []                          │
+│   26    │     'archive.lenin.works.1923.jan.02'      │  [Object]   │                         []                          │
+└─────────┴────────────────────────────────────────────┴─────────────┴─────────────────────────────────────────────────────┘
+27

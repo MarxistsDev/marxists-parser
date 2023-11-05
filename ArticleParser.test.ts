@@ -6,7 +6,7 @@ import { Worker, isMainThread, parentPort, workerData } from "worker_threads";
 
 // Usage example:
 const FOLDER = './www/';
-const OUT = 'full';
+const OUT = 'article';
 const DATA = './data/';
 
 async function processFilesInWorker() {
