@@ -1,4 +1,4 @@
-import { getUniqueFileName } from './common';
+import { getUniqueFileName, heDecode } from './common';
 import { Glossary, glossary } from './GlossaryParser';
 import fs from 'fs/promises';
 import path from 'path';
@@ -15,7 +15,9 @@ const processFiles = async() => {
       for (const file of files) {
         if (file.endsWith('.htm') || file.endsWith('.html')) {
           const html = await fs.readFile(FOLDER + file, 'utf-8');
-          data.push(...glossary(html));
+          data.push(...glossary(file.replace(/\./g, '/')
+          .replace('/htm', '.htm')
+          .replace(/\/[\w\-]+.htm(l)?$/, '/'), heDecode(html)));
         }
       }
       const outFile = await getUniqueFileName(OUT, DATA);
@@ -27,3 +29,5 @@ const processFiles = async() => {
 }
   
 processFiles();
+
+//Need to Connect Author in glossary and Author in `author.json`

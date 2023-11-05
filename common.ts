@@ -1,5 +1,6 @@
 import path from "path";
 import fs from 'fs/promises';
+import he from 'he';
 
 export async function getUniqueFileName(filename:string, dir:string = './data', ext:string='.json') {
     let fileNumber = 1; // Start with 2 to get the desired format like full2.json
@@ -57,4 +58,8 @@ export async function getFileWithHighestIncrement(baseName: string, extension: s
       console.error('Error while getting the highest increment file:', error);
       return null;
     }
+}
+
+export function heDecode(text:string){
+  return he.decode(text);
 }

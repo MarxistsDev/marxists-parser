@@ -13,7 +13,7 @@ export interface Glossary{
     content:string  | undefined;
 }
 
-export function glossary(html:string): Glossary[]{
+export function glossary(href:string, html:string): Glossary[]{
     let glossary_list = html.split(/<a\s*name\=\"(.*?)"\s*>\s*<\s*\/a>/).filter(x => x.trim() != '\n' && x.trim() != '');
     glossary_list.shift();
     //console.log(glossary_list.filter(x => /^[\w\-]*$/.test(x.trim())));
@@ -34,10 +34,15 @@ export function glossary(html:string): Glossary[]{
                 //console.log('Bio Length', bio.length, bio);
                 if(bio_split.length === 3){
                     object_list[object_list.length - 1].term = bio_split[1];
+                    
+                    
+                    // Find index in authors.json here
+
+
                     //object_list[object_list.length - 1].content = bio_split[2];
                     let pic_split = bio_split[2].split(/<\s*?img\s*?src\s*?=\s*?\"(.*?)\".*?>/);
                     if(pic_split.length === 3){
-                        object_list[object_list.length - 1].image = pic_split[1];
+                        object_list[object_list.length - 1].image = href + pic_split[1];
                         object_list[object_list.length - 1].content = pic_split[2];
                     }else if(pic_split.length === 1){
                         object_list[object_list.length - 1].content = pic_split[0];

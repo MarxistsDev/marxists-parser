@@ -1,0 +1,97 @@
+'Author (Many to Many*)
+'	Work (One to Many)
+'		Article
+'
+'Movement (Many to Many) -> This is a collection of Authors
+'Colletion (Many to Many) -> This is a collection of Works 
+@startuml Database
+
+' hide the spot
+' hide circle
+
+' avoid problems with angled crows feet
+skinparam linetype ortho
+
+entity "Author" as Author {
+  *author_id : number <<generated>>
+  --
+  *name : text
+  '*shortname : text | text[]
+  *image : text
+  *description : text
+  *old_works: text //for backwards compatibility
+}
+
+entity "Work" as Work {
+  *work_id : number <<generated>>
+  --
+  *title : text
+  *written : text | date
+  *publication_date : text | date
+  *source: text
+  *translated : volunteer_id | text
+  *transcription : volunteer_id | text
+  *copyright : text
+  *old_works_index: text // for backwards compatibility
+}
+
+entity "Author_Work" as Author_Work{
+  *author_work_id: number <<generated>>
+  *author_id : number <<FK>>
+  *work_id : number <<FK>>
+  --
+}
+
+entity "Article" as Article {
+  *article_id : number <<generated>>
+  *work_id : number <<FK>>
+  --
+  *title : text
+  *content : text
+  *note : text
+  *old_works: text // for backwards compatibility
+}
+
+entity "Movement (includes Groups)" as Movement {
+  *movement_id : number <<generated>>
+  --
+  *name : text
+  *old_movement: text // for backwards compatibility
+}
+
+entity "Collection (includes Sujects)" as Collection {
+  *collection_id : number <<generated>>
+  --
+  *name : text
+  *old_collection: text // for backwards compatibility
+}
+
+entity "Movement_Author" as Movement_Author {
+  *movement_author_id : number <<generated>>
+  *movement_id : number <<FK>>
+  *author_id : number <<FK>>
+  --
+}
+
+entity "Collection_Work" as Collection_Work {
+  *collection_work_id : number <<generated>>
+  *collection_id : number <<FK>>
+  *work_id : number <<FK>>
+  --
+}
+
+'Author ||..o{ Work : "Many to Many*"
+Work |o--o{ Article : "One to Many"
+
+Author |o..o{ Author_Work : "One to Many"
+Author_Work }o..o| Work: "Many to One"
+
+'Movement ||--o{ Author : "Many to Many"
+'Collection ||--o{ Work : "Many to Many"
+
+Movement |o..o{ Movement_Author : "One to Many"
+Collection |o..o{ Collection_Work : "One to Many"
+Movement_Author }o..o| Author : "Many to One"
+Collection_Work }o..o| Work : "Many to One"
+
+@enduml

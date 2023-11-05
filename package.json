@@ -1,5 +1,6 @@
 {
   "devDependencies": {
+    "@types/he": "^1.2.2",
     "@types/node": "^20.8.6",
     "typescript": "^5.2.2"
   },
@@ -21,6 +22,7 @@
   "dependencies": {
     "@types/jsdom": "^21.1.4",
     "axios": "^1.6.0",
+    "he": "^1.2.0",
     "jsdom": "^22.1.0"
   }
 }

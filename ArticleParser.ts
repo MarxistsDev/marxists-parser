@@ -9,7 +9,7 @@ export interface Information{
     translated: string | undefined;
     transcription: string | undefined;
     copyright: string | undefined;
-    other: {name:string, value:string} | undefined
+    other: {name:string, value:string}[] | undefined
 }
 
 export interface Article{
@@ -62,7 +62,9 @@ export default class ArticleParser{
                 } else if (info === 'copyleft' || info === 'public domain') {
                     information.copyright = x.content;
                 } else {
-                    information.other = {name:x.info, value:x.content};
+                    if(!information.other)
+                        information.other = []
+                    information.other.push({name:x.info, value:x.content});
                 }
             });
             return information;
@@ -112,7 +114,7 @@ export default class ArticleParser{
         return uniqueObjects;
     }
 
-    public static notes(html:string){
+    public static notes(html:string){ // Might be better to just get text
         let note_elements: any[] = [];
         new JSDOM(html.split(REGEX).filter(x => /<h\d>Notes<\/h\d>/.test(x))[0]).window.document.querySelectorAll('p.endnote, .fst') //JSDOM to change
         .forEach((x:any) => note_elements.push(x));

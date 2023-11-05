@@ -94,10 +94,113 @@ Bio [
     '<img src="pics/ruge.gif" border="0" align="right" hspace="10" width="150" alt="cartoon by engels of fat dude" />\r\n'
 ]
 Bio [ '\n<p>&#160;</p>\n' ]
-[Error: ENOENT: no such file or directory, access 'data/glossary.json'] {
+[Error: ENOENT: no such file or directory, access 'data/glossary2.json'] {
   errno: -2,
   code: 'ENOENT',
   syscall: 'access',
-  path: 'data/glossary.json'
+  path: 'data/glossary2.json'
+}
+JSON data is saved.
+
+> lenin@1.0.0 test3
+> npx tsc && node ./dist/GlossaryParser.test.js
+
+Bio [ 'budyenny-s-m.' ]
+Bio [ 'Büchner' ]
+Bio [ 'helene-dönniges' ]
+Bio [
+  '\n<p> </p>\n',
+  '\nGrün, Karl (1813-87)\n',
+  '\n' +
+    '<p>\n' +
+    ' Writer.  From 1842 onwards Editor of the  newspaper, <em>Mannheimer Abendzeitung. </em> After 1844 one of the chief representatives of "<a href="../../terms/t/r.htm#true-socialism">true socialism</a>".\n' +
+    '</p>\n' +
+    '\n' +
+    '\n' +
+    '<p> </p>\n' +
+    ' ',
+  '\nGrylewicz, Anton (1885–1971) .',
+  '\n' +
+    '<p> Son of worker, mechanic. In <a href="../../orgs/g/e.htm#gsdlp">SPD</a> (Sozialistische Partei Deutschlands, Social-Democratic Party) in 1912. Two years on Eastern Front, wounded and discharged. Toolmaker in Berlin factory, joined USPD and revolutionary delegates. Assistant to Eichhorn at police headquarters, played important role in January 1919. Deputy-Chairman and then Chairman of USPD in Greater Berlin in 1920, leader of USPD Left. Secretary of Berlin-Brandenburg organisation in 1921. Took part in 1923 in Moscow in preparing plans for insurrection. Leader of <a href="../../orgs/c/o.htm#kdp">KPD</A> (Kommunistischen Partei Deutschlands/German Communist Party) Left, member of Zentrale in 1924, several times sentenced. Expelled from Party in 1927. Became leader of Trotskyists in Germany. Published Trotsky’s writings in Germany. In 1933 arrested in Prague in connection with frame-up aimed at implicating him in espionage. Cleared, reached France in 1937 and Cuba in 1941, where he worked as cabinet-maker until 1955. Retired to West Berlin.</p>\n' +
+    '\n' +
+    '<p>  </p>\n' +
+    '<hr />\n' +
+    '\n' +
+    '<p class="footer">\n' +
+    '<a href="../../g.htm">Index of the Letter G</a> | <a href="../../index.htm">Encyclopedia of Marxism</a>\n' +
+    '</p>\n' +
+    '\n' +
+    '</div>\n' +
+    '</blockquote>\n' +
+    '</body>\n' +
+    '</html>\n'
+]
+Bio [
+  '\n<p> </p>\n',
+  'Kiselev, Aleksey Semenovich (1879 - 1937)',
+  '\n' +
+    '<p>\n' +
+    'Born near <a href="../../../archive/bobrovskaya/twenty-years/ch12.htm">Ivanovo-Voznesensk</a> (a town in the district of Vladimir, with an 1887 population of 22,000), beginning in 1893 Aleksey worked as a machinist (<em>slesarem</em>) in a textile factory. In 1898 he joined the <a href="../../orgs/r/u.htm#rsdlp">RSDLP</a>, working for the party in Ivanovo-Voznesensk, Moscow, Kharkov, Baku, and Odessa. He was arrested on multiple occasions. In 1914 Aleksey joined the Central Committee of the party, and shortly thereafter he was arrested again and sent to Siberia. Knowing he would be forcibly drafted into the army at the outbreak of World War One, Aleksey escaped prison and moved from city to city in Siberia to avoid  capture. In the General Amnesty of the February Revolution, he returned to the east in 1917 and resumed his position of the Central Committee. He later became only a candidate (alternate) member of the Central Committee, and served this role from 1917-19, 1921-23, and 1925-34, actively filling in at various times (from February 1919 to April 1920; in 1924 as secretary). \n' +
+    '</p>\n' +
+    '<p class="quote">\n' +
+    'Here in Ivanovo-Voznesensk, without the softening effect of any intermediate class, the two antagonistic sides--labour and capital--stood confronted. The issue was as clear as clear could be, and that is why it was so easy to carry on our Bolshevik propaganda there. Here we had no serious conflict with any organized groups of Mensheviks or Socialist-Revolutionaries. That is why the Ivanovo-Voznesensk proletariat, led by some of the most prominent comrades in our ranks, was always in the forefront of the proletarian revolution.\n' +
+    '</p>\n' +
+    '<p class="inline">\n' +
+    'Cecilia Bobrovskaya<br />\n' +
+    '<a href="../../../archive/bobrovskaya/twenty-years/ch12.htm">Twenty Years in Underground Russia: Memoirs of a Rank-and-File Bolshevik</a>\n' +
+    '</p>\n' +
+    '<p>\n' +
+    "In 1918 Kiselev became a member of the presidium of the VSNKh (Supreme Council for the National Economy of the USSR). Also in the Summer of 1918, he led the political department of the Orenburg Red Army division. In 1919, in addition to these roles <em>and</em> serving on the CC of the party, Kiselev also served on the Council of People's Commissars for Turkestan. Beginning in April 1920, he left his position on the CC of the party to become Chairman of the All-Russia Miner's Union in Turkestan.\n" +
+    '</p>\n' +
+    '<p>\n' +
+    `In 1920 Kiselev supported the <a href="../../orgs/w/o.htm#workers-opposition">Worker's Opposition</a>, but conformed to party discipline when the group was banned. From 1923-24 he served as a member of the presidium of the TSKK (Central Control Commission of the Communist Party). In 1923 Kiselev also became the People's Commissar of the Workers and Peasant Inspection of the RSFSR, and a reserve member to the same role for the USSR. From 1925-34, he again became a candidate member of the Central Committee of the Communist Party. Little else is know about his life during this time.\n` +
+    '</p>\n' +
+    '<p>\n' +
+    'On September 7, 1937, after 20 years of service to the Soviet government, Kiselev is arrested for allegedly belonging to an "anti-Soviet counter-revolutionary organisation". Uncharacteristic of the slaughter of Old Bolsheviks who led such distinguished and long careers, Kiselev is almost immediately shot after his arrest, on October 30, 1937, in Moscow.\n' +
+    '</p>\n' +
+    '<p>\n' +
+    `In 1956, he is among the first to be officially "rehabilitated" after Stalin's death. \n` +
+    '</p>\n' +
+    '\n' +
+    '\n' +
+    '<p> </p>\n',
+  '\nKitchener, Horatio Herbert (1850-1916)\n',
+  '<p>\n' +
+    "British soldier who became Commander-in-Chief of South Africa in 1900, where he pioneered the use of civilian repression (e.g. concentration camps) as a method of colonial warfare. Commander-in-Chief 1902-9 and then British Agent (i.e. Governor) in Egypt until 1914 when he became War Secretary and organized Britain's first conscript army for the war in Europe. Died when the boat on which he was travelling was torpedoed in 1916.\n" +
+    '</p>\n' +
+    '\n'
+]
+Bio [
+  '\r\n',
+  'Mead, George Herbert (1863-1931)',
+  '\r\n' +
+    '<p>\r\n' +
+    '<img src="pics/mead-george-herbert.jpg" alt="GH Mead" align="right" vspace="10" hspace="10" width="150" border="1" />\r\n' +
+    'American pragmatist social psychologist, founder of Symbolic Interactionism. </p>\r\n' +
+    '<p>Mead studied at Oberlin College and Harvard University; 1891-94 taught philosophy and psychology at the University of Michigan; 1894 -1931 at the University of Chicago. </p>\r\n' +
+    '<p>Mead’s main contribution to social psychology was his attempt to show how self-consciousness arises through interaction with others. He thought that spoken language played a central role in this development. Through language, the child can take the role of other persons and guide his behaviour in terms of the effect his contemplated behaviour will have upon others. Mead indicated this idea in the relation between the “I” which is the subject of action and the “me” which is constituted by the reaction of others.</p>\r\n' +
+    '<p>Mead was influenced by Einstein’s theory of relativity and the idea of “emergence”, holding that a thing’s properties <em>emerged</em> as objective properties, but only under specific conditions. </p>\r\n' +
+    '<p>Mead’s works were published only after his death, when his students edited four volumes from stenographic recordings and notes on his lectures and from unpublished papers: <em>The Philosophy of the Present </em>(1932);<em> Mind, Self, and Society </em>(1934);<em> Movements of Thought in the Nineteenth Century </em>(1936); and<em> The Philosophy of the Act </em>(1938). </p>\r\n' +
+    '<p>See <a href="../../../reference/subject/philosophy/works/us/mead.htm">Science and the Objectivity of Perspectives</a>,  <a href="../../../reference/subject/philosophy/works/us/mead1.htm">Criticism of Hegelianism</a>, <a href="../../../reference/subject/philosophy/works/us/mead2.htm">Frgaments on Ethics</a> and  <a href="../../../reference/subject/philosophy/works/us/mead3.htm">The Social Self</a>.</p>\r\n' +
+    '\r\n' +
+    '\r\n' +
+    '<p> </p>\r\n',
+  '\r\nMediev, V. L',
+  '\r\n' +
+    '<p>\r\n' +
+    'Social Revolutionary. Deputy Minister to Kerensky for Military and Naval Affairs in July Coalition.</p>\r\n' +
+    '\r\n' +
+    '\r\n'
+]
+Bio [
+  '\r\n' +
+    '<img src="pics/ruge.gif" border="0" align="right" hspace="10" width="150" alt="cartoon by engels of fat dude" />\r\n'
+]
+Bio [ '\n<p> </p>\n' ]
+[Error: ENOENT: no such file or directory, access 'data/glossary2.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'access',
+  path: 'data/glossary2.json'
 }
 JSON data is saved.
