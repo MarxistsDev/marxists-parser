@@ -4,3 +4,4 @@ authors
 glossary
 dist
 *.db
+*.json
