@@ -33,11 +33,11 @@ const removeParentDir = (ogHref:string, fileLink:string):{og:string;link:string;
             .split('/')
             .slice(0, !amount_of_parent_dirs||-1*amount_of_parent_dirs===0 ? undefined : -1*amount_of_parent_dirs + 1/* Since the last index is just empty*/)
             .join('/'),
-        link: fileLink.replace('works/', '').replace(/\.\.\//g, '')
+        link: fileLink.replace(/\.\.\//g, '')
     }
 };
 
-export async function works(href: string, text: string) {
+export async function works(href: string, text: string):Promise<{href:string;title:string;}[]> {
     const dom = new JSDOM(text);
 
     const filteredLinks:any = Array.from(dom.window.document.querySelectorAll('.indentb a, .index a, .fst a, .tda a, .toc a, .disc a')).filter(x => x.getAttribute('href'));//.map(x => x.getAttribute('href'));
@@ -71,7 +71,6 @@ export async function works(href: string, text: string) {
         }
     });
 
-    const unique:{href:string;title:string;}[] | unknown[] = Array.from(new Map(linkobj.map((item:{href:string;title:string;}) =>[item['href'], item])).values());
-
-    return unique;
+    const unique:{href:string;title:string;}[] = Array.from(new Map(linkobj.map((item:{href:string;title:string;}) =>[item['href'], item])).values()) as { href: string; title: string; }[];
+    return unique; 
 }

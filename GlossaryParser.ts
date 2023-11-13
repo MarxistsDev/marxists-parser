@@ -59,3 +59,34 @@ export function glossary(href:string, html:string): Glossary[]{
 
     return object_list;
 }
+
+export function getShortname(url:string):string {
+    const url_split = url.split('/');
+    return url_split[url_split.length-2]
+}; 
+
+export function linkGlossarytoAuthor(
+    glossary:Glossary[], 
+    authors:{
+        id:number;
+        index:number;
+        type:number;
+        href:string;
+        name:string;
+    }[]){
+        let linked: Glossary[] = [];
+
+        /*const reducedAuthors = authors.filter(x => 
+            x.href.startsWith("archive") || x.href.startsWith("reference"));*/
+
+            authors.forEach(author => {
+            const matchingTerm = glossary.find(entry => entry.term?.includes(author.name)) 
+                ?? glossary.find(entry => entry.shortname?.includes(getShortname(author.href)));
+            if(matchingTerm)
+                linked.push(matchingTerm);
+            else
+                console.log(author.name,  getShortname(author.href));
+        });
+        console.log("Authors", authors.length);
+        console.log("Linked",linked.length);
+}

@@ -17,9 +17,18 @@ entity "Author" as Author {
   --
   *name : text
   '*shortname : text | text[]
+  *old_works: text //for backwards compatibility
+}
+
+'Their is technically a difference between Author name and Glossary name
+entity "Glossary" as Glossary {
+  *glossary_id : number <<generated>>
+  *author_id : number <<FK>>
+  --
+  *name : text
+  '*shortname : text | text[]
   *image : text
   *description : text
-  *old_works: text //for backwards compatibility
 }
 
 entity "Work" as Work {
@@ -85,6 +94,8 @@ Work |o--o{ Article : "One to Many"
 
 Author |o..o{ Author_Work : "One to Many"
 Author_Work }o..o| Work: "Many to One"
+
+Author |o..o| Glossary : "One to One"
 
 'Movement ||--o{ Author : "Many to Many"
 'Collection ||--o{ Work : "Many to Many"

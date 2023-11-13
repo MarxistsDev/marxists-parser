@@ -8,3 +8,14 @@
   path: 'data/article2.json'
 }
 JSON data is saved.
+
+> lenin@1.0.0 test
+> npx tsc && node ./dist/ArticleParser.test.js
+
+[Error: ENOENT: no such file or directory, access 'data/article2.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'access',
+  path: 'data/article2.json'
+}
+JSON data is saved.

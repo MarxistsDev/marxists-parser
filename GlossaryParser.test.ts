@@ -1,5 +1,5 @@
 import { getUniqueFileName, heDecode } from './common';
-import { Glossary, glossary } from './GlossaryParser';
+import { Glossary, glossary, linkGlossarytoAuthor } from './GlossaryParser';
 import fs from 'fs/promises';
 import path from 'path';
 
@@ -28,6 +28,12 @@ const processFiles = async() => {
     }
 }
   
-processFiles();
+//processFiles();
 
 //Need to Connect Author in glossary and Author in `author.json`
+const linkFiles = async() => {
+  const [authors, glossary] = await Promise.all([fs.readFile(DATA+'authors.json','utf-8'), fs.readFile(DATA+'glossary.json','utf-8')]);
+  linkGlossarytoAuthor(JSON.parse(glossary), JSON.parse(authors));
+}
+
+linkFiles();

@@ -8,16 +8,19 @@ const FOLDER = './authors/';
 const DATA = './data/';
 const OUT = 'work';
 
+interface Works{
+  [key: string]: { href: string; title: string; }[];
+}
 
 async function processFilesInWorker() {
   const { files } = workerData;
-  const data = [];
+  const data:Works = {};
 
   for (const file of files) {
     if (file.endsWith('.htm') || file.endsWith('.html')) {
       const filePath = path.join(FOLDER, file);
       const html = await fs.readFile(filePath, 'utf8');
-      data.push(await works(file.replace('.', '/').replace('/htm', '.htm'), heDecode(html)));
+      data[file] = await works(file.replace('.', '/').replace('/htm', '.htm'), heDecode(html));
     }
   }
 
@@ -35,7 +38,7 @@ async function main() {
     const numThreads = require('os').cpus().length; // Number of CPU cores
 
     const chunkSize = Math.ceil(files.length / numThreads);
-    const workerPromises = [];
+    const workerPromises:Promise<Works> | any = [];
 
     for (let i = 0; i < numThreads; i++) {
       const start = i * chunkSize;
@@ -59,14 +62,14 @@ async function main() {
       workerPromises.push(workerPromise);
     }
 
-    const results = await Promise.all(workerPromises);
-    const data = results.reduce((acc:any, result) => acc.concat(result), []);
+    const results:Works[] = await Promise.all(workerPromises);
+    const data = results.reduce((acc, result) => Object.assign(acc, result), {});
 
     const outFile = await getUniqueFileName(OUT, DATA);
     await fs.writeFile(outFile, JSON.stringify(data, null, 4));
     console.log('JSON data is saved.');
   } else {
-    const data = await processFilesInWorker();
+    const data:Works = await processFilesInWorker();
     parentPort.postMessage(data);
   }
 }

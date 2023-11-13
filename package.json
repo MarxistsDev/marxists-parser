@@ -1,7 +1,7 @@
 {
   "devDependencies": {
     "@types/he": "^1.2.2",
-    "@types/node": "^20.8.6",
+    "@types/node": "^20.9.0",
     "typescript": "^5.2.2"
   },
   "name": "lenin",
@@ -14,15 +14,18 @@
     "analyze": "npx tsc && node ./dist/ArticleParser.analyze.js",
     "test2": "npx tsc && node ./dist/WorkParser.test.js",
     "test3": "npx tsc && node ./dist/GlossaryParser.test.js",
-    "download": "npx tsc && node ./dist/downloader.js"
+    "download": "npx tsc && node ./dist/downloader.js",
+    "db": "npx tsc && node ./dist/DataLoader.js"
   },
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
     "@types/jsdom": "^21.1.4",
+    "@types/sqlite3": "^3.1.11",
     "axios": "^1.6.0",
     "he": "^1.2.0",
-    "jsdom": "^22.1.0"
+    "jsdom": "^22.1.0",
+    "sqlite3": "^5.1.6"
   }
 }

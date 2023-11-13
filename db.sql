@@ -1,25 +1,24 @@
 -- Create the Author table
 CREATE TABLE Author (
-    author_id INTEGER PRIMARY KEY,
-    name TEXT NOT NULL,
-    image TEXT,
-    description TEXT,
-    old_works TEXT
+  author_id INTEGER PRIMARY KEY,
+  name TEXT NOT NULL,
+  old_works TEXT
 );
 
--- Create the Author_Shortname table for the One-to-Many relationship between Author and Author_Shortname
-CREATE TABLE Author_Shortname (
-    author_shortname_id INTEGER PRIMARY KEY,
-    author_id INTEGER NOT NULL,
-    shortname TEXT NOT NULL,
-    used_as_folder BOOLEAN NOT NULL,
-    FOREIGN KEY (author_id) REFERENCES Author (author_id)
+CREATE TABLE Glossary (
+  glossary_id INTEGER PRIMARY KEY,
+  author_id INTEGER REFERENCES Author(author_id),
+  name TEXT NOT NULL,
+  shortname TEXT,
+  image TEXT,
+  description TEXT,
+  FOREIGN KEY (author_id) REFERENCES Author(author_id)
 );
 
 -- Create the Work table
 CREATE TABLE Work (
     work_id INTEGER PRIMARY KEY,
-    title TEXT NOT NULL,
+    title TEXT,
     written TEXT,
     publication_date TEXT,
     source TEXT,
@@ -44,7 +43,7 @@ CREATE TABLE Article (
     work_id INTEGER NOT NULL,
     title TEXT NOT NULL,
     content TEXT NOT NULL,
-    note TEXT,
+    note JSON,
     old_works TEXT,
     FOREIGN KEY (work_id) REFERENCES Work (work_id)
 );
