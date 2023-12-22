@@ -5,3 +5,4 @@ glossary
 dist
 *.db
 *.json
+*.sql
