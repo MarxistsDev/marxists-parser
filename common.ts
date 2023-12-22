@@ -2,6 +2,15 @@ import path from "path";
 import fs from 'fs/promises';
 import he from 'he';
 
+export interface Data {
+    "id": number;
+    "index": number;
+    "type": number;
+    "href": string;
+    "name": string;
+    "_datatype": string;
+}
+
 export async function getUniqueFileName(filename:string, dir:string = './data', ext:string='.json') {
     let fileNumber = 1; // Start with 2 to get the desired format like full2.json
   

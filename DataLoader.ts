@@ -5,7 +5,7 @@ import { Article } from './ArticleParser';
 import { title } from 'process';
 
 // Connect to the SQLite database
-const conn = new sqlite3.Database('db8.db');
+const conn = new sqlite3.Database('_db.db');
 const cursor = conn.run.bind(conn);
 
 // Load data from the JSON file
@@ -34,7 +34,8 @@ const glossary = () => {
         const image = author['image'] || null;
 
         // Insert the data into the Glossary table
-        cursor("INSERT INTO Glossary (name, image, description) VALUES (?, ?, ?)", [name?.trim(), image?.trim(), description?.trim()], function (err) {
+        console.log(`INSERT INTO Glossary (name, image, description) VALUES ('${name?.trim()}', '${image?.trim()}', '${description?.trim().replace(/\n/g, '')}')`);
+        cursor("INSERT INTO Glossary (name, image, description) VALUES (?, ?, ?)", [name?.trim(), image?.trim(), description?.trim().replace(/\n/g, '')], function (err) {
             if (err) {
                 console.error(err.message);
             } else {
@@ -184,9 +185,9 @@ const main = async () => {
 
         glossary();
 
-        authors();
+        //authors();
 
-        await articles();
+        //await articles();
     } finally {
         // Always close the database connection in a finally block
         conn.close((err) => {

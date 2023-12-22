@@ -1,76 +1,65 @@
 import { JSDOM } from 'jsdom';
 
-export interface Data {
-    "id": number;
-    "index": number;
-    "type": number;
-    "href": string;
-    "name": string;
-    "_datatype": string;
-}
-
-const removeParentDir = (ogHref:string, fileLink:string):{og:string;link:string;} => {
-    const amount_of_parent_dirs = fileLink.match(/\.\.\//g)?.length;
-
-    if (amount_of_parent_dirs)
-        console.log('\nfileLink', fileLink, '\namount_of_parent_dirs', amount_of_parent_dirs,
-            `\nBefore:`, 
-            ogHref.replace(/\./g, '/')
-            .replace('/htm', '.htm')
-            .replace(/\/[\w\-]+.htm(l)?$/, '/'), 
-            `\nAfter:`, 
-            ogHref.replace(/\./g, '/')
-            .replace('/htm', '.htm')
-            .replace(/\/[\w\-]+.htm(l)?$/, '/')
-            .split('/')
-            .slice(0, !amount_of_parent_dirs||-1*amount_of_parent_dirs===0 ? undefined : -1*(amount_of_parent_dirs + 1))
-            .join('/'));
-            
-    return {
-        og:ogHref.replace(/\./g, '/')
-            .replace('/htm', '.htm')
-            .replace(/\/[\w\-]+.htm(l)?$/, '/')
-            .split('/')
-            .slice(0, !amount_of_parent_dirs||-1*amount_of_parent_dirs===0 ? undefined : -1*amount_of_parent_dirs + 1/* Since the last index is just empty*/)
-            .join('/'),
-        link: fileLink.replace(/\.\.\//g, '')
-    }
+type Link = {
+    title: string,
+    href: string,
+    from: string // Remove in the future, since it's super inefficient and is for testing reasons
 };
 
-export async function works(href: string, text: string):Promise<{href:string;title:string;}[]> {
+type Work = Link & {
+    content: string | undefined,
+};
+
+type Index = Link & {
+    works: Work[] | undefined, 
+};
+
+export type Works = {
+  [key: string]: (Work | Index)[] | undefined;
+}
+
+export async function works(href: string, text: string):Promise<(Work | Index)[] | undefined> {
+    const normalizedHref = href.replace(/\./g, '/').replace('/htm', '.htm')
     const dom = new JSDOM(text);
-
-    const filteredLinks:any = Array.from(dom.window.document.querySelectorAll('.indentb a, .index a, .fst a, .tda a, .toc a, .disc a')).filter(x => x.getAttribute('href'));//.map(x => x.getAttribute('href'));
-    //console.log(href, filteredLinks);
-
+    dom.reconfigure({
+        url: 'https://www.marxists.org/' + normalizedHref,
+    });
+    
+    const filteredLinks:any = Array.from(dom.window.document
+        .querySelectorAll('.indentb a, .index a, .fst a, .tda a, .toc a, .disc a')
+    ).filter(x => x.getAttribute('href'));//.map(x => x.getAttribute('href'));
+    //console.log(normalizedHref, filteredLinks.map((x:any) => x.href));
     const links = Array.from(dom.window.document.querySelectorAll('a'));
 
     filteredLinks.push(...links.filter((x: HTMLAnchorElement) => {
         try {
-            let y = x.href.includes('works/') || /^\d{2,4}\//.test(x.href!.replace('works/', '').replace('../', ''));
- 
-            if (!y && x.href.trim() != '' && !x.href.toLowerCase().includes('about')) { // Testing
-                const {og, link} = removeParentDir(href, x.href)
-                if(x.href.endsWith('.pdf'))
-                    console.log('pdf: ', og + link);
-                else
-                    console.log('raw: ', og + link);
-            }
-            return y;
+            return x.href.includes('works/') || /^\d{2,4}\//
+                .test(x.href!.replace('works/', '').replace('../', ''));
         } catch (err) { }
     }));
 
 
     if(filteredLinks.length == 0)
-        console.log(href);
+        return undefined;
     const linkobj = filteredLinks.map((x: HTMLAnchorElement) =>{
-        const {og, link} = removeParentDir(href, x.href)
+        if(x.href.endsWith('index.htm'))
+            return {
+                title: x.textContent,
+                href: x.href,
+                from: 'https://www.marxists.org/' + normalizedHref,
+                works: undefined
+            } as Index;
+ 
         return {
-            href: og + link,
-            title: x.textContent
-        }
+            href: x.href,
+            title: x.textContent,
+            from: 'https://www.marxists.org/' + normalizedHref,
+            content: undefined
+        } as Work;
     });
 
-    const unique:{href:string;title:string;}[] = Array.from(new Map(linkobj.map((item:{href:string;title:string;}) =>[item['href'], item])).values()) as { href: string; title: string; }[];
+    const unique:(Work | Index)[] = Array.from(new Map(linkobj
+        .map((item:(Work | Index)) =>
+            [item['href'], item])).values()) as (Work | Index)[];
     return unique; 
 }

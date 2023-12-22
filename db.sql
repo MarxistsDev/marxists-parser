@@ -9,7 +9,7 @@ CREATE TABLE Glossary (
   glossary_id INTEGER PRIMARY KEY,
   author_id INTEGER REFERENCES Author(author_id),
   name TEXT NOT NULL,
-  shortname TEXT,
+  --shortname TEXT,
   image TEXT,
   description TEXT,
   FOREIGN KEY (author_id) REFERENCES Author(author_id)
@@ -30,11 +30,9 @@ CREATE TABLE Work (
 
 -- Create the Author_Work table for the Many-to-Many relationship between Author and Work
 CREATE TABLE Author_Work (
-    author_work_id INTEGER PRIMARY KEY,
-    author_id INTEGER NOT NULL,
-    work_id INTEGER NOT NULL,
-    FOREIGN KEY (author_id) REFERENCES Author (author_id),
-    FOREIGN KEY (work_id) REFERENCES Work (work_id)
+    author_author_id INTEGER NOT NULL,
+    work_work_id INTEGER NOT NULL,
+    PRIMARY KEY (author_author_id, work_work_id)
 );
 
 -- Create the Article table

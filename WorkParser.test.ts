@@ -1,4 +1,4 @@
-import { Data, works } from './WorkParser';
+import { Works, works } from './WorkParser';
 import { getUniqueFileName, heDecode } from './common';
 import fs from 'fs/promises';
 import path from 'path';
@@ -7,10 +7,6 @@ const { Worker, isMainThread, parentPort, workerData } = require('worker_threads
 const FOLDER = './authors/';
 const DATA = './data/';
 const OUT = 'work';
-
-interface Works{
-  [key: string]: { href: string; title: string; }[];
-}
 
 async function processFilesInWorker() {
   const { files } = workerData;

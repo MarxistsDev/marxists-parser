@@ -2,7 +2,7 @@
   "devDependencies": {
     "@types/he": "^1.2.2",
     "@types/node": "^20.9.0",
-    "typescript": "^5.2.2"
+    "typescript": "^5.3.3"
   },
   "name": "lenin",
   "version": "1.0.0",
@@ -13,6 +13,7 @@
     "test": "npx tsc && node ./dist/ArticleParser.test.js",
     "analyze": "npx tsc && node ./dist/ArticleParser.analyze.js",
     "test2": "npx tsc && node ./dist/WorkParser.test.js",
+    "test2.1": "npx tsc && node ./dist/WorkParser.test2.js",
     "test3": "npx tsc && node ./dist/GlossaryParser.test.js",
     "download": "npx tsc && node ./dist/downloader.js",
     "db": "npx tsc && node ./dist/DataLoader.js"
