@@ -33,7 +33,7 @@ const anchorsToWorks = (anchors: HTMLAnchorElement[]): Work[] => {
 }
 
 export default async function indexParser(index: Index): Promise<Index> {
-  const response = await axios.get(index.href, { responseType: 'text', responseEncoding: 'binary' });
+  const response = await axios.get(index.href, { responseType: 'text', responseEncoding: 'binary', timeout: 10000});
   const dom = new JSDOM(response.data);
   index.works = anchorsToWorks(anchorFilters(dom));
   return index;

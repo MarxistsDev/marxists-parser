@@ -16,6 +16,7 @@
     "test-work2": "npx tsc && node ./dist/WorkParser.test2.js",
     "test-glossary": "npx tsc && node ./dist/GlossaryParser.test.js",
     "test-index": "npx tsc && node ./dist/IndexParser.test.js",
+    "test-author": "npx tsc && node ./dist/Author.downloader.js",
     "download": "npx tsc && node ./dist/downloader.js",
     "db": "npx tsc && node ./dist/DataLoader.js"
   },
