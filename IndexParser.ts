@@ -3,12 +3,23 @@ import axios from 'axios';
 import { Index, Work } from './common'
 
 const anchorFilters = (dom: JSDOM): HTMLAnchorElement[] => {
-const uniqueHrefs = new Set<string>();
+  const uniqueHrefs = new Set<string>();
   const anchors = Array.from(dom.window.document.querySelectorAll('a'))
-    .filter((value: HTMLAnchorElement) =>
-      value.getAttribute('href') != null 
-        && !value.getAttribute('href')!.startsWith('../')
-        && !/\#[\w\d]+$/.test(value.getAttribute('href') ?? ''));
+    .filter((value: HTMLAnchorElement) => {
+      const href = value.getAttribute('href');
+      if (
+        href != null &&
+        !href.startsWith('../') &&
+        !/\#[\w\d]+$/.test(href) &&
+        !uniqueHrefs.has(href)
+      ) {
+        uniqueHrefs.add(href);
+        return true;
+      }
+      else
+        return false;
+    });
+  return anchors;
 }
 
 const anchorsToWorks = (anchors: HTMLAnchorElement[]): Work[] => {
