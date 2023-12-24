@@ -1,22 +1,6 @@
 import { JSDOM } from 'jsdom';
+import { Work, Index } from './common'; 
 
-type Link = {
-    title: string,
-    href: string,
-    from: string // Remove in the future, since it's super inefficient and is for testing reasons
-};
-
-type Work = Link & {
-    content: string | undefined,
-};
-
-type Index = Link & {
-    works: Work[] | undefined, 
-};
-
-export type Works = {
-  [key: string]: (Work | Index)[] | undefined;
-}
 
 export async function works(href: string, text: string):Promise<(Work | Index)[] | undefined> {
     const normalizedHref = href.replace(/\./g, '/').replace('/htm', '.htm')
@@ -46,14 +30,12 @@ export async function works(href: string, text: string):Promise<(Work | Index)[]
             return {
                 title: x.textContent,
                 href: x.href,
-                from: 'https://www.marxists.org/' + normalizedHref,
                 works: undefined
             } as Index;
  
         return {
             href: x.href,
             title: x.textContent,
-            from: 'https://www.marxists.org/' + normalizedHref,
             content: undefined
         } as Work;
     });

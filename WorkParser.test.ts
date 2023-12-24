@@ -1,5 +1,5 @@
-import { Works, works } from './WorkParser';
-import { getUniqueFileName, heDecode } from './common';
+import { works } from './WorkParser';
+import { getUniqueFileName, heDecode, Works } from './common';
 import fs from 'fs/promises';
 import path from 'path';
 const { Worker, isMainThread, parentPort, workerData } = require('worker_threads');

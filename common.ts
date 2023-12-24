@@ -11,6 +11,23 @@ export interface Data {
     "_datatype": string;
 }
 
+type Link = {
+    title: string,
+    href: string,
+};
+
+export type Work = Link & {
+    content: string | undefined,
+};
+
+export type Index = Link & {
+    works: Work[] | undefined, 
+};
+
+export type Works = {
+  [key: string]: (Work | Index)[] | undefined;
+}
+
 export async function getUniqueFileName(filename:string, dir:string = './data', ext:string='.json') {
     let fileNumber = 1; // Start with 2 to get the desired format like full2.json
   

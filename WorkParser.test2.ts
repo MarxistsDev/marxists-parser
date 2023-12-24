@@ -1,4 +1,5 @@
-import axios from 'axios';import { getUniqueFileName, heDecode } from './common';
+import axios from 'axios';
+import { getUniqueFileName, heDecode } from './common';
 import { works } from './WorkParser';
 
 const testUrl = "https://www.marxists.org/archive/lenin/works/1917/staterev/index.htm";

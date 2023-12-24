@@ -10,11 +10,12 @@
   "scripts": {
     "start": "node ./dist/index.js",
     "dev": "npx tsc && node ./dist/index.js",
-    "test": "npx tsc && node ./dist/ArticleParser.test.js",
-    "analyze": "npx tsc && node ./dist/ArticleParser.analyze.js",
-    "test2": "npx tsc && node ./dist/WorkParser.test.js",
-    "test2.1": "npx tsc && node ./dist/WorkParser.test2.js",
-    "test3": "npx tsc && node ./dist/GlossaryParser.test.js",
+    "test-article": "npx tsc && node ./dist/ArticleParser.test.js",
+    "analyze-article": "npx tsc && node ./dist/ArticleParser.analyze.js",
+    "test-work": "npx tsc && node ./dist/WorkParser.test.js",
+    "test-work2": "npx tsc && node ./dist/WorkParser.test2.js",
+    "test-glossary": "npx tsc && node ./dist/GlossaryParser.test.js",
+    "test-index": "npx tsc && node ./dist/IndexParser.test.js",
     "download": "npx tsc && node ./dist/downloader.js",
     "db": "npx tsc && node ./dist/DataLoader.js"
   },
