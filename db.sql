@@ -15,17 +15,20 @@ CREATE TABLE Glossary (
   FOREIGN KEY (author_id) REFERENCES Author(author_id)
 );
 
--- Create the Work table
+-- Create Work table
 CREATE TABLE Work (
-    work_id INTEGER PRIMARY KEY,
-    title TEXT,
-    written TEXT,
-    publication_date TEXT,
-    source TEXT,
-    translated TEXT,
-    transcription TEXT,
-    copyright TEXT,
-    old_works_index TEXT
+  work_id INTEGER PRIMARY KEY,
+  parent_work_id INTEGER REFERENCES Work(work_id),
+  title TEXT NOT NULL,
+  written TEXT,
+  publication_date TEXT,
+  source TEXT,
+  translated TEXT,
+  transcription TEXT,
+  copyright TEXT,
+  old_work TEXT,
+  content TEXT,
+  html TEXT
 );
 
 -- Create the Author_Work table for the Many-to-Many relationship between Author and Work
@@ -33,17 +36,6 @@ CREATE TABLE Author_Work (
     author_author_id INTEGER NOT NULL,
     work_work_id INTEGER NOT NULL,
     PRIMARY KEY (author_author_id, work_work_id)
-);
-
--- Create the Article table
-CREATE TABLE Article (
-    article_id INTEGER PRIMARY KEY,
-    work_id INTEGER NOT NULL,
-    title TEXT NOT NULL,
-    content TEXT NOT NULL,
-    note JSON,
-    old_works TEXT,
-    FOREIGN KEY (work_id) REFERENCES Work (work_id)
 );
 
 -- Create the Movement table

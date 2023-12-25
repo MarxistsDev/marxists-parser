@@ -1,6 +1,6 @@
 import fs from 'fs/promises';
 import path from 'path';
-import { Article, Note } from "./ArticleParser";
+import { Article } from "./ArticleParser";
 import { getFileWithHighestIncrement } from './common';
 
 // Usage example:

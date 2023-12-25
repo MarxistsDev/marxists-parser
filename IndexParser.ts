@@ -13,6 +13,7 @@ const anchorFilters = (dom: JSDOM): HTMLAnchorElement[] => {
         !uniqueHrefs.has(href.replace(/\#[\w\d]+$/, ''))
       ) {
         uniqueHrefs.add(href.replace(/\#[\w\d]+$/, ''));
+        //value.setAttribute('href', value.href);
         return true;
       }
       else
@@ -42,6 +43,9 @@ export default async function indexParser(index: Index): Promise<Index> {
     timeout: 10000,
   });
   const dom = new JSDOM(response.data);
+  dom.reconfigure({
+    url: index.href,
+  });
   index.works = anchorsToWorks(anchorFilters(dom));
   return index;
 }

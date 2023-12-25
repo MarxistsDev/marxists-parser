@@ -1,6 +1,5 @@
 'Author (Many to Many*)
 '	Work (One to Many)
-'		Article
 '
 'Movement (Many to Many) -> This is a collection of Authors
 'Colletion (Many to Many) -> This is a collection of Works 
@@ -33,6 +32,7 @@ entity "Glossary" as Glossary {
 
 entity "Work" as Work {
   *work_id : number <<generated>>
+  *parent_work_id : number <<FK>>
   --
   *title : text
   *written : text | date
@@ -41,7 +41,9 @@ entity "Work" as Work {
   *translated : volunteer_id | text
   *transcription : volunteer_id | text
   *copyright : text
-  *old_works_index: text // for backwards compatibility
+  *old_work: text // for backwards compatibility
+  *content : text // vectors
+  *html : text
 }
 
 entity "Author_Work" as Author_Work{
@@ -49,16 +51,6 @@ entity "Author_Work" as Author_Work{
   *author_id : number <<FK>>
   *work_id : number <<FK>>
   --
-}
-
-entity "Article" as Article {
-  *article_id : number <<generated>>
-  *work_id : number <<FK>>
-  --
-  *title : text
-  *content : text
-  *note : text
-  *old_works: text // for backwards compatibility
 }
 
 entity "Movement (includes Groups)" as Movement {
@@ -90,7 +82,7 @@ entity "Collection_Work" as Collection_Work {
 }
 
 'Author ||..o{ Work : "Many to Many*"
-Work |o--o{ Article : "One to Many"
+Work |o--o{ Work : "One to Many" : parent_work_id
 
 Author |o..o{ Author_Work : "One to Many"
 Author_Work }o..o| Work: "Many to One"
@@ -104,5 +96,4 @@ Movement |o..o{ Movement_Author : "One to Many"
 Collection |o..o{ Collection_Work : "One to Many"
 Movement_Author }o..o| Author : "Many to One"
 Collection_Work }o..o| Work : "Many to One"
-
 @enduml

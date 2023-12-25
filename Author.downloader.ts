@@ -9,7 +9,7 @@ import fs from 'fs/promises';
 const loadAuthorJson = async (author_works: string, outFile: string) => {
   const works_index = (await axios.get("https://marxists.org/" + author_works, { responseType: 'text', responseEncoding: 'binary' })).data;
   const work: (Work | Index)[] | undefined = await works(author_works, works_index);
-  console.log("Work:", work);
+  //console.log("Work:", work);
   if (work === undefined)
     throw new Error("Damn");
   /*const res = await Promise.all(work.map(async (x: (Work | Index)) => {
@@ -39,3 +39,5 @@ const loadAuthorJson = async (author_works: string, outFile: string) => {
 }
 
 loadAuthorJson("archive/lenin/by-date.htm", "./data/lenin_works.json");
+loadAuthorJson("reference/archive/mao/selected-works/date-index.htm", "./data/mao_works.json");
+loadAuthorJson("reference/archive/stalin/works/decades-index.htm", "./data/stalin_works.json");
