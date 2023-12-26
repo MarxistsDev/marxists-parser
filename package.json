@@ -25,10 +25,11 @@
   "description": "",
   "dependencies": {
     "@types/jsdom": "^21.1.4",
+    "@types/pg": "^8.10.9",
     "@types/sqlite3": "^3.1.11",
     "axios": "^1.6.0",
     "he": "^1.2.0",
     "jsdom": "^22.1.0",
-    "sqlite3": "^5.1.6"
+    "pg": "^8.11.3"
   }
 }
