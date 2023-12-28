@@ -1,10 +1,5 @@
 {
-  "devDependencies": {
-    "@types/he": "^1.2.2",
-    "@types/node": "^20.9.0",
-    "typescript": "^5.3.3"
-  },
-  "name": "lenin",
+  "name": "Marxists-org Infomation Loader",
   "version": "1.0.0",
   "main": "index.ts",
   "scripts": {
@@ -30,6 +25,12 @@
     "axios": "^1.6.0",
     "he": "^1.2.0",
     "jsdom": "^22.1.0",
+    "p-limit": "^3.1.0",
     "pg": "^8.11.3"
+  },
+  "devDependencies": {
+    "@types/he": "^1.2.2",
+    "@types/node": "^20.9.0",
+    "typescript": "^5.3.3"
   }
 }

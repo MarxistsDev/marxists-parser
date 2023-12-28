@@ -1,7 +1,7 @@
 import { Pool } from 'pg';
 import * as fs from 'fs';
 import { Glossary, getShortname } from './GlossaryParser';
-import { Article } from './ArticleParser';
+import ArticleParser, { Article } from './ArticleParser';
 import { Index, Work } from './common';
 import { release } from 'os';
 
@@ -14,6 +14,9 @@ const pool = new Pool({
     port: 5432,
     ssl: false,
 });
+
+
+const files = fs.readdirSync('./www2/');
 
 // Load data from the JSON file
 
@@ -47,7 +50,7 @@ const glossary = async () => {
                 [name?.trim(), image?.trim(), description?.trim().replace(/\n/g, '')]
             );
         }
-    }catch (e:unknown){
+    } catch (e: unknown) {
         console.error("Glossary Error:", e);
     } finally {
         client.release();
@@ -82,7 +85,7 @@ const authors = async () => {
                 );
             }
         }
-    }catch (e:unknown){
+    } catch (e: unknown) {
         console.error("Author Error:", e);
     } finally {
         client.release();
@@ -91,14 +94,30 @@ const authors = async () => {
 };
 
 const addWork = async (element: Work, parent: number | null = null): Promise<number> => {
+    let article: Article | null = null;
+    if (files.includes(element.href.replace(/\//g, '.')))
+        article = ArticleParser.parse(element.title, fs.readFileSync(`./www2/${element.href.replace(/\//g, '.')}`).toString())
+
+    /*
+    INSERT INTO "Work" (search) VALUES 
+    (setweight(to_tsvector('simple', 'Your Title'), 'A') 
+    || ' ' || setweight(to_tsvector('english', 'Your Content'), 'B'));
+    */
 
     const client = await pool.connect();
     try {
         if (parent !== null)
-            console.log(`INSERT INTO "Work" (old_work, title, parent_work_id) VALUES (${element.href}, ${element.title}, ${parent})`);
+            console.log(`INSERT INTO "Work" (old_work, title, parent_work_id, written, publication_date, source, translated, transcription, copyright, html, search) VALUES (${[element.href, element.title, parent,
+            article?.information?.written,
+            article?.information?.published, article?.information?.source,
+            article?.information?.translated, article?.information?.transcription,
+            article?.information?.copyright, article?.html?.substring(0, 10)].filter(s => s).join(", ")}), (setweight(to_tsvector('simple', '${element.title}'), 'A') || ' ' || setweight(to_tsvector('english', '${article?.content?.substring(0, 10)}'), 'B')))`);
         const result = await client.query(
-            'INSERT INTO "Work" (old_work, title, parent_work_id) VALUES ($1, $2, $3) RETURNING work_id',
-            [element.href, element.title, parent]
+            `INSERT INTO "Work" (old_work, title, parent_work_id, written, publication_date, source, translated, transcription, copyright, html, search) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, (setweight(to_tsvector('simple', $2), 'A') || ' ' || setweight(to_tsvector('english', $11), 'B'))) RETURNING work_id`,
+            [element.href, element.title, parent, article?.information?.written,
+            article?.information?.published, article?.information?.source,
+            article?.information?.translated, article?.information?.transcription,
+            article?.information?.copyright, article?.html, article?.content]
         );
 
         return result.rows[0].work_id;
@@ -108,17 +127,16 @@ const addWork = async (element: Work, parent: number | null = null): Promise<num
 };
 
 const addAuthorWork = async (element: (Work | Index), author_id: number): Promise<number> => {
-
     let work_id: number;
-
     if ((element as Index).works) {
         work_id = await addWork({ title: element.title, href: element.href } as Work);
-        let promises: Promise<number>[] = [];
+        //let promises: Promise<number>[] = [];
         console.log("Works:", (element as Index).works?.length);
-        (element as Index).works?.forEach(async (work) => {
-            promises.push(addWork(work as Work, work_id));
-        });
-        await Promise.all(promises);
+        for (const work of (element as Index).works ?? []){
+            //promises.push(addWork(work as Work, work_id));
+            await addWork(work as Work, work_id)
+        }
+        //await Promise.all(promises);
     }
     else
         work_id = await addWork(element as Work);
@@ -132,7 +150,7 @@ const addAuthorWork = async (element: (Work | Index), author_id: number): Promis
         );
 
         return work_id;
-    }catch (e:unknown){
+    } catch (e: unknown) {
         console.error("Author Work Error:", e);
         return -1;
     } finally {
@@ -151,7 +169,7 @@ const findAuthorByName = async (name: string): Promise<number | null> => {
 
         const row = result.rows[0];
         return row ? row.author_id : null;
-    }catch (e:unknown){
+    } catch (e: unknown) {
         console.error("Find Author By Name Error:", e);
         return null;
     } finally {
@@ -167,11 +185,14 @@ const loadAuthorWork = async (name: string) => { // Note this does not include t
     const author_id = await findAuthorByName(name);
     if (author_id == null)
         throw new Error(`Author '${name}' is missing`);
-    let promises: Promise<number>[] = [];
+    /*let promises: Promise<number>[] = [];
     works.forEach(element => {
         promises.push(addAuthorWork(element, author_id));
-    });
-    Promise.all(promises);
+    });*/
+    for(const element of works){
+        await addAuthorWork(element, author_id);
+    }
+    //Promise.all(promises);
 }
 
 const main = async () => {
@@ -181,9 +202,9 @@ const main = async () => {
     await authors();
 
     //await articles();
-    loadAuthorWork('lenin');
-    loadAuthorWork('mao');
-    loadAuthorWork('stalin');
+    await loadAuthorWork('lenin');
+    await loadAuthorWork('mao');
+    await loadAuthorWork('stalin');
 };
 
 main();
