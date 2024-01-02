@@ -1,5 +1,7 @@
 import * as fs from 'fs/promises';
 import axios from 'axios';
+import * as iconv from 'iconv-lite';
+import * as chardet from 'chardet';
 import pLimit from 'p-limit';
 import * as path from 'path';
 import { Index, Work } from './common';
@@ -12,17 +14,21 @@ let files:string[] = [];
 // Must check if is already installed
 async function downloadFile(item:{href:string;}, outDir:string) {
     try {
-        if ((item['href'].endsWith('.html') || item['href'].endsWith('.htm')) && !files.includes((URL + item['href']).replace(/\//g, '.'))) {
-            const response = await axios.get(/*URL + */item['href'], { responseType: 'text', responseEncoding:'binary' });
+        if ((item['href'].endsWith('.html') || item['href'].endsWith('.htm')) && !files.includes((/*URL +*/ item['href']).replace(/\//g, '.'))) {
+            const response = await axios.get(/*URL + */item['href']);
+            // Detect the character encoding of the HTML content
+            const detectedEncoding = chardet.detect(Buffer.from(response.data)) || 'utf-8';
 
-            if (!response.data.includes('<title>Object not found!</title>')) {
+            const htmlDecode = iconv.decode(Buffer.from(response.data), detectedEncoding);
+
+            if (!htmlDecode.includes('<title>Object not found!</title>')) {
                 console.log(">", item['href']);
                 const filePath = path.join(outDir,(/*URL + */item['href']).replace(/\//g, '.'));
-                await fs.writeFile(filePath, response.data.toString('latin1'));
+                await fs.writeFile(filePath, htmlDecode);
             }
         }
     } catch (error) {
-        console.error(`~${item['href']}`);
+        console.error(`~${item['href']} ${error}`);
     }
 }
 
@@ -49,10 +55,10 @@ async function downloadFromJson(filename: string, outDir: string = 'www', dir: s
 }
 
 async function main() {
-    files = await fs.readdir('./www2/');
-    await downloadFromJson('lenin_works', 'www2');
-    //await downloadFromJson('stalin_works');
-    //await downloadFromJson('mao_works');
+    files = await fs.readdir('./www3/');
+    await downloadFromJson('lenin_works', 'www3');
+    await downloadFromJson('stalin_works', 'www3');
+    await downloadFromJson('mao_works', 'www3');
     //await downloadFromJson('authors', 'authors');
     //await downloadFromJson('glossary_index', 'glossary');
 }

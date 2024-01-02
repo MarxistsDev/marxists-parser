@@ -49,3 +49,19 @@ export default async function indexParser(index: Index): Promise<Index> {
   index.works = anchorsToWorks(anchorFilters(dom));
   return index;
 }
+
+
+export async function removeWorksAlreadyInIndex(list: (Work | Index)[]): Promise<(Work | Index)[]> {
+  
+  const indexes: Index[] = list.filter((work: (Work | Index)) => (work as Index).works) as Index[];
+  
+  const indexWorks: Work[] = indexes.flatMap((index: Index) => index.works).filter((x: (Work | undefined)) => x !== undefined) as Work[]; 
+
+  //return works.filter((work: Work) => !indexWorks.some((w: Work) => w.href === work.href));
+
+  return list.filter((work: (Work | Index)) => {
+    if (!(work as Index).works)
+      return !indexWorks.some((w: Work) => w.href === work.href);
+    return true;
+  });
+}

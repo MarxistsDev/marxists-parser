@@ -107,11 +107,14 @@ const addWork = async (element: Work, parent: number | null = null): Promise<num
     const client = await pool.connect();
     try {
         if (parent !== null)
-            console.log(`INSERT INTO "Work" (old_work, title, parent_work_id, written, publication_date, source, translated, transcription, copyright, html, search) VALUES (${[element.href, element.title, parent,
+            console.log(`'${element.title}' Parented by #${parent}`);
+        else
+            console.log(`'${element.title}' is an Orphan`);
+            /*console.log(`INSERT INTO "Work" (old_work, title, parent_work_id, written, publication_date, source, translated, transcription, copyright, html, search) VALUES (${[element.href, element.title, parent,
             article?.information?.written,
             article?.information?.published, article?.information?.source,
             article?.information?.translated, article?.information?.transcription,
-            article?.information?.copyright, article?.html?.substring(0, 10)].filter(s => s).join(", ")}), (setweight(to_tsvector('simple', '${element.title}'), 'A') || ' ' || setweight(to_tsvector('english', '${article?.content?.substring(0, 10)}'), 'B')))`);
+            article?.information?.copyright, article?.html?.substring(0, 10)].filter(s => s).join(", ")}), (setweight(to_tsvector('simple', '${element.title}'), 'A') || ' ' || setweight(to_tsvector('english', '${article?.content?.substring(0, 10)}'), 'B')))`);*/
         const result = await client.query(
             `INSERT INTO "Work" (old_work, title, parent_work_id, written, publication_date, source, translated, transcription, copyright, html, search) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, (setweight(to_tsvector('simple', $2), 'A') || ' ' || setweight(to_tsvector('english', $11), 'B'))) RETURNING work_id`,
             [element.href, element.title, parent, article?.information?.written,

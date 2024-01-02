@@ -1,5 +1,5 @@
 import { Works, Work, Index } from './common';
-import indexParser from './IndexParser';
+import indexParser, { removeWorksAlreadyInIndex } from './IndexParser';
 import { works } from './WorkParser';
 import axios from 'axios';
 import fs from 'fs/promises';
@@ -35,7 +35,8 @@ const loadAuthorJson = async (author_works: string, outFile: string) => {
       console.error("failed page:", x.href);
     }
   }
-  await fs.writeFile(outFile, JSON.stringify(res, null, 4))
+  const filteredRes = await removeWorksAlreadyInIndex(res);
+  await fs.writeFile(outFile, JSON.stringify(filteredRes, null, 4))
 }
 
 loadAuthorJson("archive/lenin/by-date.htm", "./data/lenin_works.json");
