@@ -1,5 +1,5 @@
 import ArticleParser, { Article } from "./ArticleParser";
-import { getUniqueFileName, heDecode } from './common';
+import { getUniqueFileName, decode } from './common';
 import fs from 'fs/promises';
 import path from 'path';
 import { Worker, isMainThread, parentPort, workerData } from "worker_threads";
@@ -17,7 +17,7 @@ async function processFilesInWorker() {
     if (file.endsWith('.htm') || file.endsWith('.html')) {
       const filePath = path.join(FOLDER, file);
       const html = await fs.readFile(filePath, 'utf8');
-      articles.push(ArticleParser.parse(file.replace('.html', '').replace('.htm', ''), heDecode(html)));
+      articles.push(ArticleParser.parse(file.replace('.html', '').replace('.htm', ''), decode(html)));
     }
   }
 

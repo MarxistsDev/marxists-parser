@@ -6,20 +6,20 @@
 * 4. content until the next person
 */
 
-export interface Glossary{
-    shortname:string[] | undefined;
-    term:string  | undefined;
-    image:string | undefined;
-    content:string  | undefined;
+export interface Glossary {
+    shortname: string[] | undefined;
+    term: string | undefined;
+    image: string | undefined;
+    content: string | undefined;
 }
 
-export function glossary(href:string, html:string): Glossary[]{
+export function glossary(href: string, html: string): Glossary[] {
     let glossary_list = html.split(/<a\s*name\=\"(.*?)"\s*>\s*<\s*\/a>/).filter(x => x.trim() != '\n' && x.trim() != '');
     glossary_list.shift();
     //console.log(glossary_list.filter(x => /^[\w\-]*$/.test(x.trim())));
-    let object_list:Glossary[] = []
+    let object_list: Glossary[] = []
 
-    let has_added_content:boolean = false;
+    let has_added_content: boolean = false;
     glossary_list.forEach((str, index) => {
         if (/^[\w\-]*$/.test(str.trim())) { // short-names
             if (!has_added_content && object_list.length > 0 && object_list[object_list.length - 1].content === undefined) {
@@ -32,25 +32,25 @@ export function glossary(href:string, html:string): Glossary[]{
             if (object_list.length > 0) {
                 let bio_split = str.split(/<\s*?(p|span)\s*?class=\"term\".*?>([\w\W]*?)<\s*?\/\s*?(p|span)\s*?>/).filter(x => x != 'span' && x != 'p');
                 //console.log('Bio Length', bio.length, bio);
-                if(bio_split.length === 3){
+                if (bio_split.length === 3) {
                     object_list[object_list.length - 1].term = bio_split[1];
-                    
-                    
+
+
                     // Find index in authors.json here
 
 
                     //object_list[object_list.length - 1].content = bio_split[2];
                     let pic_split = bio_split[2].split(/<\s*?img\s*?src\s*?=\s*?\"(.*?)\".*?>/);
-                    if(pic_split.length === 3){
+                    if (pic_split.length === 3) {
                         object_list[object_list.length - 1].image = href + pic_split[1];
                         object_list[object_list.length - 1].content = pic_split[2];
-                    }else if(pic_split.length === 1){
+                    } else if (pic_split.length === 1) {
                         object_list[object_list.length - 1].content = pic_split[0];
-                    }else
+                    } else
                         console.log('Pic', pic_split);
-                }else
+                } else
                     console.log('Bio', bio_split);
-                
+
             } else {
                 console.log('No previous shortname to associate content with.');
             }
@@ -60,33 +60,33 @@ export function glossary(href:string, html:string): Glossary[]{
     return object_list;
 }
 
-export function getShortname(url:string):string {
+export function getShortname(url: string): string {
     const url_split = url.split('/');
-    return url_split[url_split.length-2]
-}; 
+    return url_split[url_split.length - 2]
+};
 
 export function linkGlossarytoAuthor(
-    glossary:Glossary[], 
-    authors:{
-        id:number;
-        index:number;
-        type:number;
-        href:string;
-        name:string;
-    }[]){
-        let linked: Glossary[] = [];
+    glossary: Glossary[],
+    authors: {
+        id: number;
+        index: number;
+        type: number;
+        href: string;
+        name: string;
+    }[]) {
+    let linked: Glossary[] = [];
 
-        /*const reducedAuthors = authors.filter(x => 
-            x.href.startsWith("archive") || x.href.startsWith("reference"));*/
+    /*const reducedAuthors = authors.filter(x => 
+        x.href.startsWith("archive") || x.href.startsWith("reference"));*/
 
-            authors.forEach(author => {
-            const matchingTerm = glossary.find(entry => entry.term?.includes(author.name)) 
-                ?? glossary.find(entry => entry.shortname?.includes(getShortname(author.href)));
-            if(matchingTerm)
-                linked.push(matchingTerm);
-            else
-                console.log(author.name,  getShortname(author.href));
-        });
-        console.log("Authors", authors.length);
-        console.log("Linked",linked.length);
+    authors.forEach(author => {
+        const matchingTerm = glossary.find(entry => entry.term?.includes(author.name))
+            ?? glossary.find(entry => entry.shortname?.includes(getShortname(author.href)));
+        if (matchingTerm)
+            linked.push(matchingTerm);
+        else
+            console.log(author.name, getShortname(author.href));
+    });
+    console.log("Authors", authors.length);
+    console.log("Linked", linked.length);
 }

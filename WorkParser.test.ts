@@ -1,5 +1,5 @@
 import { works } from './WorkParser';
-import { getUniqueFileName, heDecode, Works } from './common';
+import { getUniqueFileName, decode, Works } from './common';
 import fs from 'fs/promises';
 import path from 'path';
 const { Worker, isMainThread, parentPort, workerData } = require('worker_threads');
@@ -16,7 +16,7 @@ async function processFilesInWorker() {
     if (file.endsWith('.htm') || file.endsWith('.html')) {
       const filePath = path.join(FOLDER, file);
       const html = await fs.readFile(filePath, 'utf8');
-      data[file] = await works(file.replace('.', '/').replace('/htm', '.htm'), heDecode(html));
+      data[file] = await works(file.replace('.', '/').replace('/htm', '.htm'), decode(html));
     }
   }
 

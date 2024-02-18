@@ -38,8 +38,6 @@ export default async function indexParser(index: Index): Promise<Index> {
     baseURL: 'https://www.marxists.org',
     headers: { 'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:121.0) Gecko/20100101 Firefox/121.0' },
     method: 'GET',
-    responseType: 'text',
-    responseEncoding: 'binary',
     timeout: 10000,
   });
   const dom = new JSDOM(response.data);

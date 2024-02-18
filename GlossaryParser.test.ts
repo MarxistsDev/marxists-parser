@@ -1,4 +1,4 @@
-import { getUniqueFileName, heDecode } from './common';
+import { getUniqueFileName, decode } from './common';
 import { Glossary, glossary, linkGlossarytoAuthor } from './GlossaryParser';
 import fs from 'fs/promises';
 import path from 'path';
@@ -17,7 +17,7 @@ const processFiles = async() => {
           const html = await fs.readFile(FOLDER + file, 'utf-8');
           data.push(...glossary(file.replace(/\./g, '/')
           .replace('/htm', '.htm')
-          .replace(/\/[\w\-]+.htm(l)?$/, '/'), heDecode(html)));
+          .replace(/\/[\w\-]+.htm(l)?$/, '/'), decode(html)));
         }
       }
       const outFile = await getUniqueFileName(OUT, DATA);

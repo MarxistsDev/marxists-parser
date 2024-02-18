@@ -1,7 +1,7 @@
 import path from "path";
 import fs from 'fs/promises';
-import he from 'he';
-import axios from "axios";
+import * as iconv from 'iconv-lite';
+import * as chardet from 'chardet';
 
 export interface Data {
   "id": number;
@@ -87,6 +87,8 @@ export async function getFileWithHighestIncrement(baseName: string, extension: s
   }
 }
 
-export function heDecode(text: string) {
-  return he.decode(text);
+export function decode(text: string){
+  const detectedEncoding = chardet.detect(Buffer.from(text)) || 'utf-8';
+  const htmlDecode = iconv.decode(Buffer.from(text), detectedEncoding);
+  return htmlDecode;
 }
