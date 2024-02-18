@@ -12,15 +12,6 @@ const loadAuthorJson = async (author_works: string, outFile: string) => {
   //console.log("Work:", work);
   if (work === undefined)
     throw new Error("Damn");
-  /*const res = await Promise.all(work.map(async (x: (Work | Index)) => {
-    try{
-    if(x.href.endsWith('index.htm')) //Typescript is a stupid language
-      return await indexParser((x as Index));
-    } catch (err){
-      console.error("failed page:", x.href);
-    }
-    return x;
-  }));*/
 
   const res = [];
   for (const x of work) {
